@@ -10,16 +10,16 @@ class MgOauth2Plugin : MethodCallHandler {
     companion object {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "mg_oauth2")
-            channel.setMethodCallHandler(MgOauth2Plugin())
+//            val channel = MethodChannel(registrar.messenger(), "mg_oauth2")
+//            channel.setMethodCallHandler(MgOauth2Plugin())
         }
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        when (call.method) {
-            "getPlatformVersion" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
-            "getTime" -> result.success("${System.currentTimeMillis()}")
-            else -> "-"
-        }
+//        when (call.method) {
+//            "getPlatformVersion" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
+//            "getTime" -> result.success("${System.currentTimeMillis()}")
+//            else -> "-"
+//        }
     }
 }

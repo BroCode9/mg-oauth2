@@ -18,12 +18,12 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
         GeneratedPluginRegistrant.registerWith(this)
 
-        MethodChannel(flutterView, "mg_oauth3").setMethodCallHandler(
+        MethodChannel(flutterView, "plugin.screen").setMethodCallHandler(
                 object : MethodChannel.MethodCallHandler {
                     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
                         calResult = result
 
-                        if (call.method.equals("startNewActivity")) {
+                        if (call.method.equals("openLoginScreen")) {
                             val intent = Intent(this@MainActivity, SecondActivity::class.java)
                             startActivity(intent)
                         }
