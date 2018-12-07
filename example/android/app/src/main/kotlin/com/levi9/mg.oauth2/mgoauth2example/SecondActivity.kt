@@ -2,10 +2,10 @@ package com.levi9.mg.oauth2.mgoauth2example
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.google.gson.Gson
+import com.levi9.mg.oauth2.mgoauth2example.models.RequestParams
 
 class SecondActivity : AppCompatActivity() {
 
@@ -13,11 +13,32 @@ class SecondActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
 
+        val request_arguments = intent.getStringExtra("request_arguments")
+
         val webView = findViewById<WebView>(R.id.webView)
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = MyWebClient(this)
 
-        webView.loadUrl("https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=eeffec03-c281-4980-b6c0-8c5cbb564dc4&response_type=code&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient&response_mode=query&scope=offline_access%20user.read%20mail.read&state=12345")
+        webView.loadUrl(genereateLoginUrl(request_arguments))
+    }
+
+    private fun genereateLoginUrl(request_arguments: String?): String {
+        if (request_arguments != null) {
+            val requestParams = Gson().fromJson(request_arguments, RequestParams::class.java)
+
+            val stringBuilder = StringBuilder()
+            stringBuilder.append(requestParams.url)
+                    .append("client_id=").append(requestParams.clientID)
+                    .append("&response_type=").append(requestParams.response)
+                    .append("&redirect_uri=").append(requestParams.redirectURI)
+                    .append("&response_mode=").append(requestParams.responseMode)
+                    .append("&scope=").append(requestParams.scope)
+                    .append("&state=").append(requestParams.state)
+
+            return stringBuilder.toString()
+        }
+
+        return ""
     }
 }
 
@@ -28,8 +49,8 @@ class MyWebClient(val activity: AppCompatActivity) : WebViewClient() {
     }
 
     override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-        if(url != null && url.contains("code")) {
-            val start = url.indexOf("?code") - 5
+        if (url != null && url.contains("code")) {
+            val start = url.indexOf("?code=") + 6
             val end = url.indexOf("&state")
             MainActivity.calResult.success(url.substring(start, end))
             activity.finish()
