@@ -1,4 +1,4 @@
-package com.levi9.mg-oauth2.mgoauth2example
+package com.levi9.mg.oauth2.mgoauth2example
 
 import android.os.Bundle
 

@@ -1,4 +1,4 @@
-package com.levi9.mg-oauth2.mgoauth2
+package com.levi9.mg.oauth2.mgoauth2
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

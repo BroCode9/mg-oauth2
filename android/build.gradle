@@ -1,4 +1,4 @@
-group 'com.levi9.mg-oauth2.mgoauth2'
+group 'com.levi9.mg.oauth2.mgoauth2'
 version '1.0-SNAPSHOT'
 
 buildscript {
