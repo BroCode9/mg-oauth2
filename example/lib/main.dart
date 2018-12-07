@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     MgOauth2.openLoginScreen.then((value) {
       setState(() {
         Fluttertoast.showToast(
-          msg: "Done"
+          msg: value
         );
       });
     });
