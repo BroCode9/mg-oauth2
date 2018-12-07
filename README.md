@@ -1,6 +1,12 @@
 # mg_oauth2
+![mg_oauth2](https://github.com/BroCode9/mg-oauth2/blob/develop/logo.png)
 
-A new flutter plugin project.
+Ever been driven off by lack of documentation and amount of code you need to write just to start using Microsoft Graph API?
+Lack of documentation isn't helping either.
+
+## Our Goal
+
+MG-Oauth2 is intended to ease using Graph API and make you focus on your own work. What's even better we mapped most of important objects so you can start retrieving users, their emails and calendar data. 
 
 ## Getting Started
 
