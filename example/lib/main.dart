@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:mg_oauth2/mg_oauth2.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,36 +13,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // String _platformVersion = 'Unknown';
 
   @override
   void initState() {
     super.initState();
-    // initPlatformState();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  // Future<void> initPlatformState() async {
-  //   String platformVersion;
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     platformVersion = await MgOauth2.platformVersion;
-  //   } on PlatformException {
-  //     platformVersion = 'Failed to get platform version.';
-  //   }
-
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted) return;
-
-  //   setState(() {
-  //     _platformVersion = platformVersion;
-  //   });
-  // }
-
   openLoginScreen() {
-    MgOauth2.openLoginScreen.then((value) {
+    var mgOuath = new MgOuath2AuthorizeModel(
+      "eeffec03-c281-4980-b6c0-8c5cbb564dc4",
+      ResponseType.code(),
+      "/nativeclient",
+      ResponseMode.query(),
+      ScopeBuilder().offlineAccess().userRead().mailRead().build(),
+      "123"
+    );
+    MgOauth2.openLoginScreen(mgOuath).then((value) {
       setState(() {
         Fluttertoast.showToast(
           msg: value
@@ -57,7 +42,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('BroCode9 The Flutter Plugin'),
         ),
         body: new Center(
           child: new RaisedButton(

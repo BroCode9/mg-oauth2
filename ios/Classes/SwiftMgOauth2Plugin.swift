@@ -19,11 +19,23 @@ public class SwiftMgOauth2Plugin: NSObject, FlutterPlugin {
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        call.arguments
         switch call.method {
         case "openLoginScreen":
+            let arguments = (call.arguments as? String)?.replacingOccurrences(of: "\\", with: "").data(using: String.Encoding.utf8)
+            var loginArgumentModel: LoginArgumentModel?
+            do {
+                if let arguments = arguments {
+                    loginArgumentModel = try JSONDecoder().decode(LoginArgumentModel.self, from: arguments)
+                }
+            } catch let error {
+                print("Parsing error: \(error)")
+            }
+//            print("TESTING - Value: \(loginArgumentModel?.clientID)")
+
+//            let argumentsMap = arguments.flatMap()
             let myWebViewVC = MyWebViewVC.init()
             myWebViewVC.flutterResult = result
+            myWebViewVC.urlArgument = loginArgumentModel
             myWebViewVC.view.frame = myViewController?.view.frame ?? CGRect.zero
             myViewController?.present(myWebViewVC, animated: true, completion: nil)
         default:
@@ -49,6 +61,7 @@ protocol MyWebViewDelegate {
 class MyWebViewVC: UIViewController, WKNavigationDelegate {
     var myWebView: WKWebView?
     var flutterResult: FlutterResult?
+    var urlArgument: LoginArgumentModel?
     var closeImage: UIImageView = UIImageView.init(image: UIImage.init(named: "close"))
     
     // Setup the top part safe area value based on the device and if it has a notch or not
@@ -112,6 +125,16 @@ class MyWebViewVC: UIViewController, WKNavigationDelegate {
         }
         decisionHandler(.allow)
     }
+}
+
+class LoginArgumentModel: Decodable {
+    let url: String
+    let clientID: String
+    let response: String
+    let redirectURI: String
+    let responseMode: String
+    let scope: String
+    let state: String
 }
 
 extension URL {
