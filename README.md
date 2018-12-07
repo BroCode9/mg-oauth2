@@ -25,11 +25,11 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 1. [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.0.0-stable.zip)
 2. Create a directory and unzip the SDK.
 3. Extract the SDK on desired location for example:
-  `cd ~/development`
-  `unzip ~/Downloads/flutter_macos_v1.0.0-stable.zip`
-  4. Add the flutter tool to your path:
-  `export PATH=$PATH:`pwd`/flutter/bin`
-  _Note: The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
+<br/><br/>`cd ~/development`
+<br/><br/>`unzip ~/Downloads/flutter_macos_v1.0.0-stable.zip`
+<br/><br/>4. Add the flutter tool to your path:
+<br/><br/>`export PATH=$PATH:``pwd``/flutter/bin`
+<br/><br/>_Note: The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
 
 ## Set your path
 - TBA
