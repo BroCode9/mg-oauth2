@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
   //   });
   // }
 
-  getTime() {
+  openLoginScreen() {
     MgOauth2.openLoginScreen.then((value) {
       setState(() {
         Fluttertoast.showToast(
@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: new Center(
           child: new RaisedButton(
-            onPressed: (){},
+            onPressed: openLoginScreen,
             child: new Text("Open Login"),
           )
         )

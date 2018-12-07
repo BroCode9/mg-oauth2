@@ -3,7 +3,7 @@ import UIKit
 
 public class SwiftMgOauth2Plugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "mg_oauth3", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "plugin.screen", binaryMessenger: registrar.messenger())
         let instance = SwiftMgOauth2Plugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
