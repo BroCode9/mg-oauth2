@@ -1,2 +1,8 @@
-# mg-oauth2
-TBD
+# mg_oatuh2
+
+A new Flutter project.
+
+## Getting Started
+
+For help getting started with Flutter, view our online
+[documentation](https://flutter.io/).
