@@ -22,8 +22,8 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 
 ## Installing Flutter SDK
 
-*[Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.0.0-stable.zip)
-*Create a directory and unzip the SDK.
-*Extract the SDK on desired location for example:
-`cd ~/development`
-`unzip ~/Downloads/flutter_macos_v1.0.0-stable.zip`
+* [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.0.0-stable.zip)
+* Create a directory and unzip the SDK.
+* Extract the SDK on desired location for example:
+<br/>`cd ~/development`
+<br/>`unzip ~/Downloads/flutter_macos_v1.0.0-stable.zip`
