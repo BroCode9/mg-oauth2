@@ -1,5 +1,5 @@
 # mg_oauth2
-![mg_oauth2](https://github.com/BroCode9/mg-oauth2/blob/develop/logo.png)
+![mg_oauth2|512x512]](https://github.com/BroCode9/mg-oauth2/blob/develop/logo.png)
 
 Ever been driven off by lack of documentation and amount of code you need to write just to start using Microsoft Graph API?
 Lack of documentation isn't helping either.
