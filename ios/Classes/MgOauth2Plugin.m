@@ -3,6 +3,6 @@
 
 @implementation MgOauth2Plugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftMgOauth2Plugin registerWithRegistrar:registrar];
+    [SwiftMgOauth2Plugin registerWithRegistrar:registrar];
 }
 @end

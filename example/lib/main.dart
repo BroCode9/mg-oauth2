@@ -40,17 +40,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future<void> getTime() async {
-    String time;
-
-    try {
-      time = await MgOauth2.time;
-    } on PlatformException {
-      time = "1234";
-    }
-
-    setState(() {
-      _platformVersion = time;
+  getTime() {
+    MgOauth2.time.then( (value) {
+      setState(() {
+        _platformVersion = value;
+      });
     });
   }
 
@@ -62,14 +56,13 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Row(children: <Widget>[
-            Text('Running on: $_platformVersion\n'),
-            new FloatingActionButton(
-              onPressed: (){
-                getTime();
-              },
-            )
-          ],)
+          child: new Text(
+            'Running on: $_platformVersion',
+            textScaleFactor: 1.0,
+          ),
+        ),
+        floatingActionButton: new FloatingActionButton(
+          onPressed: getTime,
         ),
       ),
     );
