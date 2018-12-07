@@ -25,6 +25,7 @@ class MainActivity : FlutterActivity() {
 
                         if (call.method.equals("openLoginScreen")) {
                             val intent = Intent(this@MainActivity, SecondActivity::class.java)
+                            intent.putExtra("request_arguments", call.arguments.toString())
                             startActivity(intent)
                         }
                     }
