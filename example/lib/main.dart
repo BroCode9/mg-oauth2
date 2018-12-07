@@ -40,6 +40,20 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> getTime() async {
+    String time;
+
+    try {
+      time = await MgOauth2.time;
+    } on PlatformException {
+      time = "1234";
+    }
+
+    setState(() {
+      _platformVersion = time;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,7 +62,14 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Row(children: <Widget>[
+            Text('Running on: $_platformVersion\n'),
+            new FloatingActionButton(
+              onPressed: (){
+                getTime();
+              },
+            )
+          ],)
         ),
       ),
     );
