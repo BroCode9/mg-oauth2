@@ -12,11 +12,13 @@ class MgOauth2 {
     var access_token = prefs.getString("access_token");
 
     if (access_token == null) {
-      access_token = await _channel.invokeMethod("openLoginScreen", model.toJSON());
+      access_token =
+          await _channel.invokeMethod("openLoginScreen", model.toJSON());
       await fetchAccessToken(access_token);
     }
 
     var fMe = await fetchMe(access_token);
+    var fMePhoto = await fetchMyPhoto(access_token);
 
     return access_token;
   }
@@ -56,6 +58,22 @@ class MgOauth2 {
     final response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
       return json.decode(response.body);
+    }
+
+    return "-";
+  }
+
+  static Future<void> fetchMyPhoto(accessToken) async {
+    var url = "https://graph.microsoft.com/v1.0/me/photo/\$value";
+
+    final Map<String, String> headers = {
+      "Authorization": accessToken,
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    final response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return response.body;
     }
 
     return "-";
