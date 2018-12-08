@@ -13,9 +13,9 @@ Lack of documentation isn't helping either.
   - [Linux](#linux)
 - [Getting Started](#getting-started)
   - [Installing Flutter SDK](#installing-flutter-sdk)
-    - [Windows](#windows)
-    - [macOS](#macos)
-    - [Linux](#linux)
+    - [Windows](#windows-install)
+    - [macOS](#macos-install)
+    - [Linux](#linux-install)
   - [Set your path](#set-your-path)
 
 ## Our Goal
@@ -24,7 +24,7 @@ MG-Oauth2 is intended to ease using Graph API and make you focus on your own wor
 
 ## System requirements
 
-### Windows
+### <a name="windows-install">Windows</a>
 
 * **Operating Systems:** Windows 7 SP1 or later (64-bit)
 * **Disk Space:** 400 MB (Without IDE/tools)
@@ -32,14 +32,14 @@ MG-Oauth2 is intended to ease using Graph API and make you focus on your own wor
   - [Windows PowerShell 5.0](https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell?view=powershell-6) or newer (this is pre-installed with Windows 10)
   - [Git for Windows](https://git-scm.com/download/win), with the Use Git from the Windows Command Prompt option.
 
-### MacOS
+### <a name="macos-install">macOS</a>
 
 * **Operating Systems:** macOS (64-bit)
 * **Disk Space:** 700 MB (Without IDE/tools)
 * **Tools:** Flutter depends on these tools:
   - ```bash, mkdir, rm, git, curl, unzip, which```
   
-### Linux
+### <a name="linux-install">Linux</a>
 
 * **Operating Systems:** Linux (64-bit)
 * **Disk Space:** 600 MB (Without IDE/tools)
