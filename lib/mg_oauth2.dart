@@ -9,16 +9,16 @@ class MgOauth2 {
 
   static Future<String> openLoginScreen(MgOuath2AuthorizeModel model) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var access_token = prefs.getString("access_token");
+    var accessToken = prefs.getString("access_token");
 
-    if (access_token == null) {
-      access_token = await _channel.invokeMethod("openLoginScreen", model.toJSON());
-      await fetchAccessToken(access_token);
+    if (accessToken == null) {
+      accessToken = await _channel.invokeMethod("openLoginScreen", model.toJSON());
+      await fetchAccessToken(accessToken);
     }
 
-    var fMe = await fetchMe(access_token);
+    var fMe = await fetchMe(accessToken);
 
-    return access_token;
+    return accessToken;
   }
 
   static Future<void> fetchAccessToken(code) async {
@@ -45,11 +45,11 @@ class MgOauth2 {
     }
   }
 
-  static Future<Object> fetchMe(access_token) async {
+  static Future<Object> fetchMe(accessToken) async {
     var url = 'https://graph.microsoft.com/v1.0/me';
 
     final Map<String, String> headers = {
-      "Authorization": access_token,
+      "Authorization": accessToken,
       "Content-Type": "application/x-www-form-urlencoded",
     };
 
@@ -63,15 +63,6 @@ class MgOauth2 {
 }
 
 class MgOuath2AuthorizeModel {
-// https://login.microsoftonline.com/common/oauth2/v2.0/authorize?";
-// loginURL = loginURL + "client_id=fff403f0-5ed9-4b13-b8b0-1ded3932302c";
-// loginURL = loginURL + "&response_type=code";
-// loginURL = loginURL + "&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F";
-// loginURL = loginURL + "&response_mode=query";
-// loginURL = loginURL + "&scope=user.readbasic.all";
-// loginURL = loginURL + "&state=12345";
-// loginURL = loginURL + "domain_hint=levi9.com";
-
   String _baseURL = "https://login.microsoftonline.com/common/oauth2";
   String _authorizeURL = "/v2.0/authorize?";
   String _clientID;
