@@ -11,23 +11,14 @@ class MgOauth2 {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString("access_token");
 
-<<<<<<< HEAD
-    if (access_token == null) {
-      access_token =
-          await _channel.invokeMethod("openLoginScreen", model.toJSON());
-      await fetchAccessToken(access_token);
-    }
-
-    var fMe = await fetchMe(access_token);
-    var fMePhoto = await fetchMyPhoto(access_token);
-=======
     if (accessToken == null) {
-      accessToken = await _channel.invokeMethod("openLoginScreen", model.toJSON());
+      accessToken =
+          await _channel.invokeMethod("openLoginScreen", model.toJSON());
       await fetchAccessToken(accessToken);
     }
 
     var fMe = await fetchMe(accessToken);
->>>>>>> ec02052fe97f0eb25553b077699ab5c5c8d9b42b
+    var fMePhoto = await fetchMyPhoto(accessToken);
 
     return accessToken;
   }
@@ -82,7 +73,7 @@ class MgOauth2 {
 
     final response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      return response.body;
+      return response.body.toString();
     }
 
     return "-";
@@ -90,6 +81,15 @@ class MgOauth2 {
 }
 
 class MgOuath2AuthorizeModel {
+// https://login.microsoftonline.com/common/oauth2/v2.0/authorize?";
+// loginURL = loginURL + "client_id=fff403f0-5ed9-4b13-b8b0-1ded3932302c";
+// loginURL = loginURL + "&response_type=code";
+// loginURL = loginURL + "&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F";
+// loginURL = loginURL + "&response_mode=query";
+// loginURL = loginURL + "&scope=user.readbasic.all";
+// loginURL = loginURL + "&state=12345";
+// loginURL = loginURL + "domain_hint=levi9.com";
+
   String _baseURL = "https://login.microsoftonline.com/common/oauth2";
   String _authorizeURL = "/v2.0/authorize?";
   String _clientID;
