@@ -85,22 +85,10 @@ public class DocumentActivity extends AppCompatActivity {
         TextView email = documentView.findViewById(R.id.email);
         TextView jobTitle = documentView.findViewById(R.id.jobTitle);
         TextView officeLocation = documentView.findViewById(R.id.officeLocation);
-        TextView accessToken = documentView.findViewById(R.id.accessToken);
-
 
         final String user_data = getIntent().getStringExtra("user_data");
         User user = new Gson().fromJson(user_data, User.class);
 
-        // Mocked data - DELETE!!!
-//        userImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img));
-//        userName.setText("User Name");
-//        email.setText("u.name@levi9.com");
-//        jobTitle.setText("Job");
-//        officeLocation.setText("Office");
-//        accessToken.setText(
-//                "42FWLh4OPEkQ2YCE2x623PiStGraSpbozwkHu4QNg6FOrOg3HFxqFeQgCPd9Tau9YcimTLoOHIPg9kwFyWMPKJPnPwTDxZ0krEVMWhNtKLes6t1v36xCrRLYgh9U4JSEkiIQadfNzo3oUNijl4uc9ASOBfKXp40QhxH37IgkK8IV78DO9bfgSxsrLbi6dhZK9DJk3PgC");
-
-        // Real data
         if (user.getPhotoBase64() != null
                 && user.getPhotoBase64() != "") {
             userImage.setImageBitmap(getBitmapFromString(user.getPhotoBase64()));
@@ -110,9 +98,6 @@ public class DocumentActivity extends AppCompatActivity {
         email.setText(user.getMail());
         jobTitle.setText(user.getJobTitle());
         officeLocation.setText(user.getOfficeLocation());
-
-        // TODO: get from shared prefs
-        accessToken.setText("42FWLh4OPEkQ2YCE2x623PiStGraSpbozwkHu4QNg6FOrOg3HFxqFeQgCPd9Tau9YcimTLoOHIPg9kwFyWMPKJPnPwTDxZ0krEVMWhNtKLes6t1v36xCrRLYgh9U4JSEkiIQadfNzo3oUNijl4uc9ASOBfKXp40QhxH37IgkK8IV78DO9bfgSxsrLbi6dhZK9DJk3PgC");
 
         if (!DemoUtils.checkIsSupportedDeviceOrFinish(this)) {
             // Not a supported device.
