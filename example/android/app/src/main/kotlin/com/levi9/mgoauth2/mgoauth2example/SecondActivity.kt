@@ -1,23 +1,34 @@
-package com.levi9.mg.oauth2.mgoauth2example
+package com.levi9.mgoauth2.mgoauth2example
 
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import com.google.gson.Gson
-import com.levi9.mg.oauth2.mgoauth2example.models.RequestParams
+import com.levi9.mg.oauth2.mgoauth2example.R
+import com.levi9.mgoauth2.mgoauth2example.models.RequestParams
+
 
 class SecondActivity : AppCompatActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
 
         val request_arguments = intent.getStringExtra("request_arguments")
 
+        CookieSyncManager.createInstance(this)
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.removeAllCookies {}
+
         val webView = findViewById<WebView>(R.id.webView)
+        webView.clearCache(true)
+
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = MyWebClient(this)
+
 
         webView.loadUrl(genereateLoginUrl(request_arguments))
     }

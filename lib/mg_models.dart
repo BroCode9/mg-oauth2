@@ -13,6 +13,7 @@ class MgUser {
   var mail;
   var mobilePhone;
   var officeLocation;
+  var photoBase64;
 
   MgUser(
       {this.displayName,
@@ -20,7 +21,8 @@ class MgUser {
       this.jobTitle,
       this.mail,
       this.mobilePhone,
-      this.officeLocation});
+      this.officeLocation,
+      this.photoBase64});
 
   factory MgUser.fromJson(Map<String, dynamic> json) => _$MgUserFromJson(json);
 
@@ -80,6 +82,26 @@ class ScopeBuilder {
 
   ScopeBuilder mailRead() {
     _result += " mail.read";
+    return this;
+  }
+
+  ScopeBuilder calendarsRead() {
+    _result += " calendars.read";
+    return this;
+  }
+
+ScopeBuilder contactsRead() {
+    _result += " contacts.read";
+    return this;
+  }
+
+ScopeBuilder peopleRead() {
+    _result += " people.read";
+    return this;
+  }
+
+  ScopeBuilder userReadBasicAll() {
+    _result += " user.readbasic.all";
     return this;
   }
 

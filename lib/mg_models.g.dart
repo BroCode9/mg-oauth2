@@ -13,7 +13,8 @@ MgUser _$MgUserFromJson(Map<String, dynamic> json) {
       jobTitle: json['jobTitle'],
       mail: json['mail'],
       mobilePhone: json['mobilePhone'],
-      officeLocation: json['officeLocation'])
+      officeLocation: json['officeLocation'],
+      photoBase64: json['photoBase64'])
     ..id = json['id'];
 }
 
@@ -24,5 +25,6 @@ Map<String, dynamic> _$MgUserToJson(MgUser instance) => <String, dynamic>{
       'jobTitle': instance.jobTitle,
       'mail': instance.mail,
       'mobilePhone': instance.mobilePhone,
-      'officeLocation': instance.officeLocation
+      'officeLocation': instance.officeLocation,
+      'photoBase64': instance.photoBase64
     };

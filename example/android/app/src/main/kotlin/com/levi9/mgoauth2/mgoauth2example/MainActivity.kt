@@ -1,7 +1,8 @@
-package com.levi9.mg.oauth2.mgoauth2example
+package com.levi9.mgoauth2.mgoauth2example
 
 import android.content.Intent
 import android.os.Bundle
+import com.levi9.mgoauth2.mgoauth2example.document.DocumentActivity
 
 import io.flutter.app.FlutterActivity
 import io.flutter.plugin.common.MethodCall
@@ -24,8 +25,13 @@ class MainActivity : FlutterActivity() {
                         calResult = result
 
                         if (call.method.equals("openLoginScreen")) {
+                            // Please supply data for intent based od {@see document.Constants.java}
                             val intent = Intent(this@MainActivity, SecondActivity::class.java)
                             intent.putExtra("request_arguments", call.arguments.toString())
+                            startActivity(intent)
+                        } else if(call.method.equals("openArScreen")) {
+                            val intent = Intent(this@MainActivity, DocumentActivity::class.java)
+                            intent.putExtra("user_data", call.arguments.toString())
                             startActivity(intent)
                         }
                     }

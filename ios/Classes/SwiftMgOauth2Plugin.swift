@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import WebKit
+import ARKit
 
 public class SwiftMgOauth2Plugin: NSObject, FlutterPlugin {
     var myViewController: UIViewController?
@@ -35,6 +36,21 @@ public class SwiftMgOauth2Plugin: NSObject, FlutterPlugin {
             myWebViewVC.authorizeModel = authorizeModel
             myWebViewVC.view.frame = myViewController?.view.frame ?? CGRect.zero
             myViewController?.present(myWebViewVC, animated: true, completion: nil)
+        case "openArScreen":
+            if #available(iOS 11.0, *) {
+                let arguments = (call.arguments as? String)?.data(using: String.Encoding.utf8)
+                var mgUser: MgUser?
+                do {
+                    if let arguments = arguments {
+                        mgUser = try JSONDecoder().decode(MgUser.self, from: arguments)
+                    }
+                } catch let error {
+                    print("Parsing error: \(error)")
+                }
+                let arvc = ARViewController.init()
+                arvc.mgUser = mgUser
+                myViewController?.present(arvc, animated: true, completion: nil)
+            }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -129,6 +145,108 @@ class MyWebViewVC: UIViewController, WKNavigationDelegate {
     }
 }
 
+@available(iOS 11.0, *)
+class ARViewController: UIViewController {
+    var sceneView: ARSCNView?
+    var arDataVC: ARDataViewController?
+    var mgUser: MgUser?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        sceneView = ARSCNView.init(frame: view.frame, options: nil)
+        view.addSubview(sceneView!)
+        
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        sceneView?.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        sceneView?.session.run(configuration, options: .resetTracking)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.addBox()
+            self.addTapGestureToSceneView()
+        }
+    }
+    
+    func addTapGestureToSceneView() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(withGestureRecognizer:)))
+        sceneView?.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
+        let tapLocation = recognizer.location(in: sceneView)
+        let hitTestResults = sceneView?.hitTest(tapLocation)
+        guard let node = hitTestResults?.first?.node else { return }
+        node.removeFromParentNode()
+        arDataVC?.dismiss(animated: false, completion: nil)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        sceneView = nil
+    }
+    
+    func addBox() {
+        let plane = SCNPlane(width: 0.5, height: 0.4)
+        
+        arDataVC = ARDataViewController.init()
+        arDataVC?.mgUser = mgUser
+        plane.firstMaterial?.diffuse.contents = arDataVC!.view
+        
+        let boxNode = SCNNode()
+        boxNode.geometry = plane
+        boxNode.position = SCNVector3(0, 0, -0.8)
+        
+        sceneView?.scene.rootNode.addChildNode(boxNode)
+    }
+}
+
+class ARDataViewController: UIViewController {
+    var mgUser: MgUser?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .white
+        
+        let dataDecoded: Data = Data(base64Encoded: (mgUser?.photoBase64)!)!
+        let decodedimage: UIImage = UIImage(data: dataDecoded)!
+        let profileImage = UIImageView.init(image: decodedimage)
+        profileImage.frame = CGRect(x: view.frame.width/3, y: 25, width: 150, height: 320)
+        profileImage.backgroundColor = .red
+        view.addSubview(profileImage)
+        
+        let displayName = UILabel.init(frame: CGRect(x: view.frame.width/8, y: profileImage.frame.origin.y + 320, width: 10, height: 10))
+        displayName.text = mgUser?.displayName
+        displayName.font = displayName.font.withSize(40)
+        displayName.sizeToFit()
+        view.addSubview(displayName)
+        
+        let email = UILabel.init(frame: CGRect(x: view.frame.width/8, y: displayName.frame.origin.y + 70, width: 10, height: 10))
+        email.text = mgUser?.mail
+        email.font = email.font.withSize(30)
+        email.sizeToFit()
+        view.addSubview(email)
+        
+        let position = UILabel.init(frame: CGRect(x: view.frame.width/8, y: email.frame.origin.y + 70, width: 10, height: 10))
+        position.text = mgUser?.jobTitle
+        position.font = position.font.withSize(40)
+        position.sizeToFit()
+        view.addSubview(position)
+        
+        let location = UILabel.init(frame: CGRect(x: view.frame.width/8, y: position.frame.origin.y + 70, width: 10, height: 10))
+        location.text = mgUser?.officeLocation
+        location.font = location.font.withSize(40)
+        location.sizeToFit()
+        view.addSubview(location)
+        
+        let separatorView = UIView.init(frame: CGRect(x: 0, y: location.frame.origin.y + 50, width: view.frame.width, height: 5))
+        separatorView.backgroundColor = .black
+        view.addSubview(separatorView)
+    }
+}
+
 class AuthorizeModel: Decodable {
     let url: String
     let clientID: String
@@ -148,6 +266,17 @@ class AuthorizeModel: Decodable {
         
         return URL.init(string: "https://www.google.com/")!
     }
+}
+
+class MgUser: Decodable {
+    let id: String?
+    let displayName: String?
+    let givenName: String?
+    let jobTitle: String?
+    let mail: String?
+    let mobilePhone: String?
+    let officeLocation: String?
+    let photoBase64: String?
 }
 
 extension URL {

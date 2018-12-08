@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:mg_oauth2/mg_oauth2.dart';
 import 'package:mg_oauth2/mg_models.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:convert';
+import 'dart:typed_data' show Uint8List;
 
 void main() => runApp(MyApp());
 
@@ -18,7 +19,9 @@ class _MyAppState extends State<MyApp> {
 
   var _isLoggedIn;
 
-  var _name = "";
+  var _photoBase64;
+
+  MgUser _user = MgUser();
 
   @override
   void initState() {
@@ -34,7 +37,14 @@ class _MyAppState extends State<MyApp> {
         ResponseType.code(),
         "/nativeclient",
         ResponseMode.query(),
-        ScopeBuilder().offlineAccess().userRead().mailRead().build(),
+        ScopeBuilder()
+            .userRead()
+            .mailRead()
+            .calendarsRead()
+            .contactsRead()
+            .peopleRead()
+            .userReadBasicAll()
+            .build(),
         "123");
   }
 
@@ -59,19 +69,43 @@ class _MyAppState extends State<MyApp> {
   }
 
   fetchMyProfile() {
-    MgOauth2.fetchMe().then((value) {
+    MgOauth2.fetchMyProfile().then((value) {
       setState(() {
-        _name = value.displayName;
+        _user = value;
+      });
+    });
+  }
+
+  fetchMyPhoto() {
+    MgOauth2.fetchMyPhoto().then((value) {
+      setState(() {
+        _user.photoBase64 = value;
       });
     });
   }
 
   logout() {
     MgOauth2.logout().then((value) {
-        setState(() {
-          _isLoggedIn = false;
-        });
+      setState(() {
+        _isLoggedIn = false;
+        _user = MgUser();
+        _photoBase64 = null;
+      });
     });
+  }
+
+  startArActivity() {
+    if (_photoBase64 != null || _user.displayName != null) {
+      MgOauth2.startArActivity(_user, _photoBase64);
+      return;
+    }
+    Fluttertoast.showToast(msg: "Load user data or picture 1st!");
+  }
+
+  ImageProvider getImageProvider() {
+    var data = new Uint8List.fromList(_user.photoBase64.codeUnits);
+    _photoBase64 = base64.encode(data);
+    return Image.memory(data).image;
   }
 
   @override
@@ -88,25 +122,95 @@ class _MyAppState extends State<MyApp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   new RaisedButton(
-                    onPressed: _isLoggedIn ? null : openLoginScreen,
+                    onPressed: _isLoggedIn
+                        ? null
+                        : () {
+                            openLoginScreen();
+                          },
                     child: new Text("Login"),
                   ),
                   new RaisedButton(
-                    onPressed: openLoginScreen,
+                    onPressed: _isLoggedIn
+                        ? () {
+                            logout();
+                          }
+                        : null,
                     child: new Text("Logout"),
                   ),
                 ],
               ),
-              new Center(
-                child: new RaisedButton(
-                  onPressed: fetchMyProfile,
-                  child: new Text("Fetch my profile"),
-                ),
-              ),
-              new Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: new Text(_name),
-              )
+              new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new RaisedButton(
+                      onPressed: _isLoggedIn
+                          ? () {
+                              fetchMyProfile();
+                            }
+                          : null,
+                      child: new Text("My profile"),
+                    ),
+                    new RaisedButton(
+                      onPressed: _isLoggedIn
+                          ? () {
+                              fetchMyPhoto();
+                            }
+                          : null,
+                      child: new Text("My Photo"),
+                    )
+                  ]),
+              _user != null
+                  ? new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new RaisedButton(
+                          onPressed: _isLoggedIn
+                              ? () {
+                                  startArActivity();
+                                }
+                              : null,
+                          child: new Text("Secret Button"),
+                        )
+                      ],
+                    )
+                  : new Container(),
+              _user.photoBase64 != null
+                  ? new Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Column(
+                            children: <Widget>[
+                              new Image(
+                                width: 150,
+                                height: 150,
+                                image: getImageProvider(),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  : new Container(),
+              _user.displayName != null
+                  ? new Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Column(
+                            children: <Widget>[
+                              new Text(_user.displayName),
+                              new Text(_user.mail),
+                              new Text(_user.jobTitle),
+                              new Text(_user.officeLocation)
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  : new Container()
             ],
           )),
     );
