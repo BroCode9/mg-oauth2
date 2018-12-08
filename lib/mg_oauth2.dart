@@ -62,6 +62,22 @@ class MgOauth2 {
 
     return MgUser();
   }
+  
+  static Future<void> fetchMyPhoto(accessToken) async {
+    var url = "https://graph.microsoft.com/v1.0/me/photo/\$value";
+
+    final Map<String, String> headers = {
+      "Authorization": accessToken,
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    final response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return response.body;
+    }
+
+    return "-";
+  }
 
   static Future<void> logout() async {
     var prefs = await SharedPreferences.getInstance();
