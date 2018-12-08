@@ -14,7 +14,7 @@ MgUser _$MgUserFromJson(Map<String, dynamic> json) {
       mail: json['mail'],
       mobilePhone: json['mobilePhone'],
       officeLocation: json['officeLocation'],
-      photoBase64: json['photoBase64'] as String)
+      photoBase64: json['photoBase64'])
     ..id = json['id'];
 }
 

@@ -5,7 +5,7 @@ import 'package:mg_oauth2/mg_models.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
-import 'dart:typed_data' show Uint8List, ByteBuffer;
+import 'dart:typed_data' show Uint8List;
 
 void main() => runApp(MyApp());
 
@@ -95,15 +95,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   ImageProvider getImageProvider() {
-    // return Image.memory(Uint8List.view(_user.photoBase64 as ByteBuffer)).image;
-    // return Image.memory(Uint8List.fromList(Utf8.encode(_user.photoBase64)).buffer).image;
-    var list = new Utf8Encoder().convert(_user.photoBase64);
-    var data = new Uint8List.fromList(list);
-    
-    // String header = "data:image/png;base64,";
-    // String base64 = new Base64Encoder().convert(data);
-    // String image = header + base64;
-
+    var data = new Uint8List.fromList(_user.photoBase64.codeUnits);
     return Image.memory(data).image;
   }
 
@@ -161,6 +153,8 @@ class _MyAppState extends State<MyApp> {
                             children: <Widget>[
                               _user.photoBase64 != ""
                                   ? new Image(
+                                      width: 150,
+                                      height: 150,
                                       image: getImageProvider(),
                                     )
                                   : new Container(),
