@@ -8,33 +8,57 @@ class MgOauth2 {
   static const MethodChannel _channel = const MethodChannel('plugin.screen');
 
   static Future<String> openLoginScreen(MgOuath2AuthorizeModel model) async {
-    String result = await _channel.invokeMethod("openLoginScreen", model.toJSON());
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var access_token = prefs.getString("access_token");
 
-    final String url = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
+    if (access_token == null) {
+      access_token = await _channel.invokeMethod("openLoginScreen", model.toJSON());
+      await fetchAccessToken(access_token);
+    }
 
-    final String body = 
-      "client_id=eeffec03-c281-4980-b6c0-8c5cbb564dc4"+
-      "&scope=user.read"+
-      "&code=$result" +
-      "&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient"+
-      "&grant_type=authorization_code";
+    var fMe = await fetchMe(access_token);
+
+    return access_token;
+  }
+
+  static Future<void> fetchAccessToken(code) async {
+    final String url =
+        "https://login.microsoftonline.com/common/oauth2/v2.0/token";
+
+    final String body = "client_id=eeffec03-c281-4980-b6c0-8c5cbb564dc4" +
+        "&scope=user.read" +
+        "&code=$code" +
+        "&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient" +
+        "&grant_type=authorization_code";
 
     final Map<String, String> headers = {
       "Content-Type": "application/x-www-form-urlencoded",
     };
 
     var result2 = await http.post(url, headers: headers, body: body);
-    if(result2.statusCode == 200) {
+    if (result2.statusCode == 200) {
       var bodyMap = json.decode(result2.body);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      
+
       await prefs.setString('access_token', bodyMap["access_token"]);
       await prefs.setString('refresh_token', bodyMap["refresh_token"]);
-
-      result = "access token: " + bodyMap["access_token"];
     }
-    
-    return result;
+  }
+
+  static Future<Object> fetchMe(access_token) async {
+    var url = 'https://graph.microsoft.com/v1.0/me';
+
+    final Map<String, String> headers = {
+      "Authorization": access_token,
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    final response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+
+    return "-";
   }
 }
 
