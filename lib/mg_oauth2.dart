@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data' show Uint8List, ByteBuffer;
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
