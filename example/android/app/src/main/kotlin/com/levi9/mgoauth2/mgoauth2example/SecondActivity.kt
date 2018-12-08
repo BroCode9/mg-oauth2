@@ -1,11 +1,12 @@
-package com.levi9.mg.oauth2.mgoauth2example
+package com.levi9.mgoauth2.mgoauth2example
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.google.gson.Gson
-import com.levi9.mg.oauth2.mgoauth2example.models.RequestParams
+import com.levi9.mg.oauth2.mgoauth2example.R
+import com.levi9.mgoauth2.mgoauth2example.models.RequestParams
 
 class SecondActivity : AppCompatActivity() {
 
