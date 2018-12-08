@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:mg_oauth2/mg_oauth2.dart';
 import 'package:mg_oauth2/mg_models.dart';
