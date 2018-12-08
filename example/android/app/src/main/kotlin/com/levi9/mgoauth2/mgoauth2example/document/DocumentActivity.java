@@ -15,16 +15,24 @@
  */
 package com.levi9.mgoauth2.mgoauth2example.document;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -47,15 +55,20 @@ import com.levi9.mg.oauth2.mgoauth2example.R;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static com.levi9.mgoauth2.mgoauth2example.document.Constants.ACCESS_TOKEN_KEY;
+import static com.levi9.mgoauth2.mgoauth2example.document.Constants.EMAIL_KEY;
+import static com.levi9.mgoauth2.mgoauth2example.document.Constants.IMAGE_KEY;
+import static com.levi9.mgoauth2.mgoauth2example.document.Constants.JOB_TITLE_KEY;
+import static com.levi9.mgoauth2.mgoauth2example.document.Constants.OFFICE_LOCATION_KEY;
+import static com.levi9.mgoauth2.mgoauth2example.document.Constants.USER_NAME_KEY;
+
 public class DocumentActivity extends AppCompatActivity {
     private static final int RC_PERMISSIONS = 0x123;
     private boolean installRequested;
 
     private GestureDetector gestureDetector;
     private Snackbar loadingMessageSnackbar = null;
-
     private ArSceneView arSceneView;
-
     private ViewRenderable documentRenderable;
 
     // True once scene is loaded
@@ -64,24 +77,58 @@ public class DocumentActivity extends AppCompatActivity {
     // True once the scene has been placed.
     private boolean hasPlacedDocumentSystem = false;
 
+    private ConstraintLayout documentView;
+    private ImageView userImage;
+    private TextView userName;
+    private TextView email;
+    private TextView jobTitle;
+    private TextView officeLocation;
+    private TextView accessToken;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
     // CompletableFuture requires api level 24
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_document);
+
+        View documentView = LayoutInflater.from(this)
+                                          .inflate(R.layout.document_layout, null);
+        userImage = documentView.findViewById(R.id.userImage);
+        userName = documentView.findViewById(R.id.userName);
+        email = documentView.findViewById(R.id.email);
+        jobTitle = documentView.findViewById(R.id.jobTitle);
+        officeLocation = documentView.findViewById(R.id.officeLocation);
+        accessToken = documentView.findViewById(R.id.accessToken);
+
+        // Mocked data - DELETE!!!
+        userImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img));
+        userName.setText("User Name");
+        email.setText("u.name@levi9.com");
+        jobTitle.setText("Job");
+        officeLocation.setText("Office");
+        accessToken.setText(
+                "42FWLh4OPEkQ2YCE2x623PiStGraSpbozwkHu4QNg6FOrOg3HFxqFeQgCPd9Tau9YcimTLoOHIPg9kwFyWMPKJPnPwTDxZ0krEVMWhNtKLes6t1v36xCrRLYgh9U4JSEkiIQadfNzo3oUNijl4uc9ASOBfKXp40QhxH37IgkK8IV78DO9bfgSxsrLbi6dhZK9DJk3PgC");
+
+        // Real data
+//        userImage.setImageBitmap(getBitmapFromString(getIntentStringForKey(IMAGE_KEY)));
+//        userName.setText(getIntentStringForKey(USER_NAME_KEY));
+//        email.setText(getIntentStringForKey(EMAIL_KEY));
+//        jobTitle.setText(getIntentStringForKey(JOB_TITLE_KEY));
+//        officeLocation.setText(getIntentStringForKey(OFFICE_LOCATION_KEY));
+//        accessToken.setText(getIntentStringForKey(ACCESS_TOKEN_KEY));
 
         if (!DemoUtils.checkIsSupportedDeviceOrFinish(this)) {
             // Not a supported device.
             return;
         }
 
-        setContentView(R.layout.activity_document);
         arSceneView = findViewById(R.id.ar_scene_view);
 
         // Build a renderable from a 2D View.
         CompletableFuture<ViewRenderable> documentControlStage = ViewRenderable.builder()
-                                                                               .setView(this, R.layout.document_layout)
+                                                                               .setView(this, documentView)
                                                                                .build();
 
         CompletableFuture.allOf(documentControlStage)
@@ -208,6 +255,12 @@ public class DocumentActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] results) {
         if (!DemoUtils.hasCameraPermission(this)) {
             if (!DemoUtils.shouldShowRequestPermissionRationale(this)) {
@@ -298,5 +351,17 @@ public class DocumentActivity extends AppCompatActivity {
 
         loadingMessageSnackbar.dismiss();
         loadingMessageSnackbar = null;
+    }
+
+    private String getIntentStringForKey(String key) {
+        if (getIntent().hasExtra(key)) {
+            return getIntent().getStringExtra(key);
+        }
+        return "";
+    }
+
+    private Bitmap getBitmapFromString(String encodedImage) {
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 }

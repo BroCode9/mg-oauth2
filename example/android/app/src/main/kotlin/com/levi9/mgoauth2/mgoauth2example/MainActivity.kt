@@ -25,6 +25,7 @@ class MainActivity : FlutterActivity() {
                         calResult = result
 
                         if (call.method.equals("openLoginScreen")) {
+                            // Please supply data for intent based od {@see document.Constants.java}
                             val intent = Intent(this@MainActivity, DocumentActivity::class.java)
                             intent.putExtra("request_arguments", call.arguments.toString())
                             startActivity(intent)
