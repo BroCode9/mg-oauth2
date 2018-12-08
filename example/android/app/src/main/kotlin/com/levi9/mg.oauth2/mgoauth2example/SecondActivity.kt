@@ -51,7 +51,7 @@ class MyWebClient(val activity: AppCompatActivity) : WebViewClient() {
     override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
         if (url != null && url.contains("code")) {
             val start = url.indexOf("?code=") + 6
-            val end = url.indexOf("&state")
+            val end = url.indexOf("&state=")
             MainActivity.calResult.success(url.substring(start, end))
             activity.finish()
             return true

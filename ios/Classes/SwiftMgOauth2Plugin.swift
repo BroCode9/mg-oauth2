@@ -119,6 +119,10 @@ class MyWebViewVC: UIViewController, WKNavigationDelegate {
                 dismiss(animated: true) {
                     self.flutterResult!(resultString)
                 }
+            } else {
+                dismiss(animated: true) {
+                    self.flutterResult!("")
+                }
             }
         }
         decisionHandler(.allow)
@@ -137,7 +141,7 @@ class AuthorizeModel: Decodable {
     func constructAuthorizeURL() -> URL {
         let escapedRedirectURI = redirectURI.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
         let escapedScope = scope.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
-        let constructedURL = "\(url)client_id=\(clientID)&respopnse_type=\(response)&redirect_uni=\(escapedRedirectURI)&response_mode=\(responseMode)&scope=\(escapedScope)&state=\(state)"
+        let constructedURL = "\(url)client_id=\(clientID)&response_type=\(response)&redirect_uri=\(escapedRedirectURI)&response_mode=\(responseMode)&scope=\(escapedScope)&state=\(state)"
         if let uri = URL.init(string: constructedURL) {
             return uri
         }
