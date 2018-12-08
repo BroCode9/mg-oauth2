@@ -71,37 +71,37 @@ class ScopeBuilder {
   String _result = "";
 
   ScopeBuilder offlineAccess() {
-    _result += "%20offline_access";
+    _result += " offline_access";
     return this;
   }
 
   ScopeBuilder userRead() {
-    _result += "%20user.read";
+    _result += " user.read";
     return this;
   }
 
   ScopeBuilder mailRead() {
-    _result += "%20mail.read";
+    _result += " mail.read";
     return this;
   }
 
   ScopeBuilder calendarsRead() {
-    _result += "%20calendars.read";
+    _result += " calendars.read";
     return this;
   }
 
 ScopeBuilder contactsRead() {
-    _result += "%20contacts.read";
+    _result += " contacts.read";
     return this;
   }
 
 ScopeBuilder peopleRead() {
-    _result += "%20people.read";
+    _result += " people.read";
     return this;
   }
 
   ScopeBuilder userReadBasicAll() {
-    _result += "%20user.readbasic.all";
+    _result += " user.readbasic.all";
     return this;
   }
 
