@@ -4,21 +4,20 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'mg_models.dart';
+
 class MgOauth2 {
   static const MethodChannel _channel = const MethodChannel('plugin.screen');
 
-  static Future<String> openLoginScreen(MgOuath2AuthorizeModel model) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var accessToken = prefs.getString("access_token");
-
-    if (accessToken == null) {
-      accessToken = await _channel.invokeMethod("openLoginScreen", model.toJSON());
-      await fetchAccessToken(accessToken);
+  static Future<LoginScreenResponse> openLoginScreen(
+      MgOuath2AuthorizeModel model) async {
+    var accessCodeResult = await _channel.invokeMethod("openLoginScreen", model.toJSON());
+    if(accessCodeResult != "result.canceled") {
+      await fetchAccessToken(accessCodeResult);
+      return LoginScreenResponse.ok;
+    } else {
+      return LoginScreenResponse.canceled;
     }
-
-    var fMe = await fetchMe(accessToken);
-
-    return accessToken;
   }
 
   static Future<void> fetchAccessToken(code) async {
@@ -45,7 +44,10 @@ class MgOauth2 {
     }
   }
 
-  static Future<Object> fetchMe(accessToken) async {
+  static Future<MgUser> fetchMe() async {
+    var prefs = await SharedPreferences.getInstance();
+    var accessToken = prefs.getString("access_token");
+
     var url = 'https://graph.microsoft.com/v1.0/me';
 
     final Map<String, String> headers = {
@@ -55,70 +57,21 @@ class MgOauth2 {
 
     final response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      return MgUser.fromJson(jsonDecode(response.body));
     }
 
-    return "-";
+    return MgUser();
+  }
+
+  static Future<void> logout() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
+  static Future<bool> isLoggedIn() async {
+    var prefs = await SharedPreferences.getInstance();
+    return prefs.getString("access_token") != null;
   }
 }
 
-class MgOuath2AuthorizeModel {
-  String _baseURL = "https://login.microsoftonline.com/common/oauth2";
-  String _authorizeURL = "/v2.0/authorize?";
-  String _clientID;
-  String _responseType;
-  String _redirectURI;
-  String _responseMode;
-  String _scope;
-  String _state;
-
-  MgOuath2AuthorizeModel(this._clientID, this._responseType, this._redirectURI,
-      this._responseMode, this._scope, this._state);
-
-  String toJSON() {
-    return json.encode({
-      "url": _baseURL + _authorizeURL,
-      "clientID": _clientID,
-      "response": _responseType,
-      "redirectURI": _baseURL + _redirectURI,
-      "responseMode": _responseMode,
-      "scope": _scope,
-      "state": _state
-    });
-  }
-}
-
-class ResponseType {
-  static String code() {
-    return "code";
-  }
-}
-
-class ResponseMode {
-  static String query() {
-    return "query";
-  }
-}
-
-class ScopeBuilder {
-  String _result = "";
-
-  ScopeBuilder offlineAccess() {
-    _result += " offline_access";
-    return this;
-  }
-
-  ScopeBuilder userRead() {
-    _result += " user.read";
-    return this;
-  }
-
-  ScopeBuilder mailRead() {
-    _result += " mail.read";
-    return this;
-  }
-
-  String build() {
-    return _result.trim();
-  }
-}
+enum LoginScreenResponse { ok, error, canceled }
