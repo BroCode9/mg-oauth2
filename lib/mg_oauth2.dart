@@ -11,8 +11,9 @@ class MgOauth2 {
 
   static Future<LoginScreenResponse> openLoginScreen(
       MgOuath2AuthorizeModel model) async {
-    var accessCodeResult = await _channel.invokeMethod("openLoginScreen", model.toJSON());
-    if(accessCodeResult != "result.canceled") {
+    var accessCodeResult =
+        await _channel.invokeMethod("openLoginScreen", model.toJSON());
+    if (accessCodeResult != "result.canceled") {
       await fetchAccessToken(accessCodeResult);
       return LoginScreenResponse.ok;
     } else {
@@ -34,13 +35,15 @@ class MgOauth2 {
       "Content-Type": "application/x-www-form-urlencoded",
     };
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var result2 = await http.post(url, headers: headers, body: body);
     if (result2.statusCode == 200) {
       var bodyMap = json.decode(result2.body);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
 
       await prefs.setString('access_token', bodyMap["access_token"]);
       await prefs.setString('refresh_token', bodyMap["refresh_token"]);
+    } else {
+      await prefs.clear();
     }
   }
 
@@ -62,8 +65,11 @@ class MgOauth2 {
 
     return MgUser();
   }
-  
-  static Future<void> fetchMyPhoto(accessToken) async {
+
+  static Future<String> fetchMyPhoto() async {
+    var prefs = await SharedPreferences.getInstance();
+    var accessToken = prefs.getString("access_token");
+
     var url = "https://graph.microsoft.com/v1.0/me/photo/\$value";
 
     final Map<String, String> headers = {
@@ -73,10 +79,18 @@ class MgOauth2 {
 
     final response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      return response.body;
+      return response.body.toString();
     }
 
     return "-";
+  }
+
+  static Future<MgUser> fetchMyProfile() async {
+    var user = await fetchMe();
+    var photoBase64 = await fetchMyPhoto();
+
+    user.photoBase64 = photoBase64;
+    return user;
   }
 
   static Future<void> logout() async {
@@ -87,6 +101,10 @@ class MgOauth2 {
   static Future<bool> isLoggedIn() async {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getString("access_token") != null;
+  }
+
+  static Future<void> startArActivity(user) async {
+    await _channel.invokeMethod("openArScreen", user.toJson());
   }
 }
 

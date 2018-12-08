@@ -19,6 +19,8 @@ class _MyAppState extends State<MyApp> {
 
   var _name = "";
 
+  var _userProfile;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,14 @@ class _MyAppState extends State<MyApp> {
         ResponseType.code(),
         "/nativeclient",
         ResponseMode.query(),
-        ScopeBuilder().offlineAccess().userRead().mailRead().build(),
+        ScopeBuilder()
+        .userRead()
+        .mailRead()
+        .calendarsRead()
+        .contactsRead()
+        .peopleRead()
+        .userReadBasicAll()
+        .build(),
         "123");
   }
 
@@ -58,9 +67,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   fetchMyProfile() {
-    MgOauth2.fetchMe().then((value) {
+    MgOauth2.fetchMyProfile().then((value) {
       setState(() {
         _name = value.displayName;
+        _userProfile = value;
       });
     });
   }
@@ -71,6 +81,10 @@ class _MyAppState extends State<MyApp> {
           _isLoggedIn = false;
         });
     });
+  }
+
+  startArActivity() {
+    MgOauth2.startArActivity(_userProfile);
   }
 
   @override
@@ -102,10 +116,13 @@ class _MyAppState extends State<MyApp> {
                   child: new Text("Fetch my profile"),
                 ),
               ),
-              new Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: new Text(_name),
-              )
+              _userProfile != null ?
+              new Center(
+                child: new RaisedButton(
+                  onPressed: startArActivity,
+                  child: new Text("AR my profile"),
+                ),
+              ) : new Container()
             ],
           )),
     );

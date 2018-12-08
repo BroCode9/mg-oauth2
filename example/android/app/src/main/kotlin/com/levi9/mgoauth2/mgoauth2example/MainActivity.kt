@@ -26,8 +26,12 @@ class MainActivity : FlutterActivity() {
 
                         if (call.method.equals("openLoginScreen")) {
                             // Please supply data for intent based od {@see document.Constants.java}
-                            val intent = Intent(this@MainActivity, DocumentActivity::class.java)
+                            val intent = Intent(this@MainActivity, SecondActivity::class.java)
                             intent.putExtra("request_arguments", call.arguments.toString())
+                            startActivity(intent)
+                        } else if(call.method.equals("openArScreen")) {
+                            val intent = Intent(this@MainActivity, DocumentActivity::class.java)
+                            intent.putExtra("user_data", call.arguments.toString())
                             startActivity(intent)
                         }
                     }

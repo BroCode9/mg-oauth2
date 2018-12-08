@@ -50,7 +50,9 @@ import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ViewRenderable;
+import com.google.gson.Gson;
 import com.levi9.mg.oauth2.mgoauth2example.R;
+import com.levi9.mgoauth2.mgoauth2example.models.User;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -93,6 +95,10 @@ public class DocumentActivity extends AppCompatActivity {
         TextView jobTitle = documentView.findViewById(R.id.jobTitle);
         TextView officeLocation = documentView.findViewById(R.id.officeLocation);
         TextView accessToken = documentView.findViewById(R.id.accessToken);
+
+
+        final String user_data = getIntent().getStringExtra("user_data");
+        User user = new Gson().fromJson(user_data, User.class);
 
         // Mocked data - DELETE!!!
         userImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img));
