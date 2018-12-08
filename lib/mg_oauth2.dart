@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MgOauth2 {
   static const MethodChannel _channel = const MethodChannel('plugin.screen');
 
   static Future<String> openLoginScreen(MgOuath2AuthorizeModel model) async {
-    final String result = await _channel.invokeMethod("openLoginScreen", model.toJSON());
+    String result = await _channel.invokeMethod("openLoginScreen", model.toJSON());
 
     final String url = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
 
@@ -17,18 +18,6 @@ class MgOauth2 {
       "&code=$result" +
       "&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient"+
       "&grant_type=authorization_code";
-      // r"&client_secret=vxgoR79;rqnSKAVPT128^$|";
-
-    // final String bodyEncoded = json.encode(body);
-
-    // final String body = json.encode({
-    //   "grant_type": "authorization_code",
-    //   "client_id": "eeffec03-c281-4980-b6c0-8c5cbb564dc4",
-    //   "scope": "offline_access%20user.read%20mail.read",
-    //   "code": result,
-    //   "redirect_uri": "https://login.microsoftonline.com/common/oauth2/nativeclient",
-    //   "client_secret": r"vxgoR79;rqnSKAVPT128^$|"
-    // });
 
     final Map<String, String> headers = {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -36,7 +25,13 @@ class MgOauth2 {
 
     var result2 = await http.post(url, headers: headers, body: body);
     if(result2.statusCode == 200) {
-      result2.body;
+      var bodyMap = json.decode(result2.body);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      
+      await prefs.setString('access_token', bodyMap["access_token"]);
+      await prefs.setString('refresh_token', bodyMap["refresh_token"]);
+
+      result = "access token: " + bodyMap["access_token"];
     }
     
     return result;
