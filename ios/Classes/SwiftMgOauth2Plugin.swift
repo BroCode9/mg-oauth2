@@ -22,20 +22,17 @@ public class SwiftMgOauth2Plugin: NSObject, FlutterPlugin {
         switch call.method {
         case "openLoginScreen":
             let arguments = (call.arguments as? String)?.replacingOccurrences(of: "\\", with: "").data(using: String.Encoding.utf8)
-            var loginArgumentModel: LoginArgumentModel?
+            var authorizeModel: AuthorizeModel?
             do {
                 if let arguments = arguments {
-                    loginArgumentModel = try JSONDecoder().decode(LoginArgumentModel.self, from: arguments)
+                    authorizeModel = try JSONDecoder().decode(AuthorizeModel.self, from: arguments)
                 }
             } catch let error {
                 print("Parsing error: \(error)")
             }
-//            print("TESTING - Value: \(loginArgumentModel?.clientID)")
-
-//            let argumentsMap = arguments.flatMap()
             let myWebViewVC = MyWebViewVC.init()
             myWebViewVC.flutterResult = result
-            myWebViewVC.urlArgument = loginArgumentModel
+            myWebViewVC.authorizeModel = authorizeModel
             myWebViewVC.view.frame = myViewController?.view.frame ?? CGRect.zero
             myViewController?.present(myWebViewVC, animated: true, completion: nil)
         default:
@@ -61,7 +58,7 @@ protocol MyWebViewDelegate {
 class MyWebViewVC: UIViewController, WKNavigationDelegate {
     var myWebView: WKWebView?
     var flutterResult: FlutterResult?
-    var urlArgument: LoginArgumentModel?
+    var authorizeModel: AuthorizeModel?
     var closeImage: UIImageView = UIImageView.init(image: UIImage.init(named: "close"))
     
     // Setup the top part safe area value based on the device and if it has a notch or not
@@ -89,12 +86,13 @@ class MyWebViewVC: UIViewController, WKNavigationDelegate {
         
         let configuration = WKWebViewConfiguration.init()
         myWebView = WKWebView.init(frame: view.frame, configuration: configuration)
-        
-        let url = URL.init(string: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=eeffec03-c281-4980-b6c0-8c5cbb564dc4&response_type=code&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient&response_mode=query&scope=offline_access%20user.read%20mail.read&state=12345")
-        let urlRequest = URLRequest.init(url: url!)
-        myWebView?.navigationDelegate = self
-        myWebView?.load(urlRequest)
-        view.addSubview(myWebView!)
+
+        if let authorizeModel = authorizeModel {
+        let urlRequest = URLRequest.init(url: authorizeModel.constructAuthorizeURL())
+            myWebView?.navigationDelegate = self
+            myWebView?.load(urlRequest)
+            view.addSubview(myWebView!)
+        }
         
         closeImage.frame = CGRect(x: view.frame.width - 55, y: topSafeArea + 15, width: 40, height: 40)
         closeImage.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(tappedClose)))
@@ -127,7 +125,7 @@ class MyWebViewVC: UIViewController, WKNavigationDelegate {
     }
 }
 
-class LoginArgumentModel: Decodable {
+class AuthorizeModel: Decodable {
     let url: String
     let clientID: String
     let response: String
@@ -135,6 +133,17 @@ class LoginArgumentModel: Decodable {
     let responseMode: String
     let scope: String
     let state: String
+    
+    func constructAuthorizeURL() -> URL {
+        let escapedRedirectURI = redirectURI.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
+        let escapedScope = scope.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
+        let constructedURL = "\(url)client_id=\(clientID)&respopnse_type=\(response)&redirect_uni=\(escapedRedirectURI)&response_mode=\(responseMode)&scope=\(escapedScope)&state=\(state)"
+        if let uri = URL.init(string: constructedURL) {
+            return uri
+        }
+        
+        return URL.init(string: "https://www.google.com/")!
+    }
 }
 
 extension URL {
