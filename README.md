@@ -13,6 +13,9 @@ Lack of documentation isn't helping either.
   - [Linux](#linux)
 - [Getting Started](#getting-started)
   - [Installing Flutter SDK](#installing-flutter-sdk)
+    - [Windows](#windows)
+    - [macOS](#macos)
+    - [Linux](#linux)
   - [Set your path](#set-your-path)
 
 ## Our Goal
@@ -54,6 +57,16 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 
 ### Installing Flutter SDK
 
+#### Windows
+1. [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_v1.0.0-stable.zip)
+2. Extract the zip file and place the contained `flutter` in the desired installation location for the Flutter SDK (eg. `C:\src\flutter`; do not install Flutter in a directory like `C:\Program Files\` that requires elevated privileges)<br/>
+3. Locate the file `flutter_console.bat` inside the `flutter` directory. Start it by double-clicking.<br/>
+*Note:* The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
+5. Run flutter doctor:<br/>
+`flutter doctor [-v]`<br/>
+This command checks your environment and displays a report to the terminal window. The Dart SDK is bundled with Flutter; it is not necessary to install Dart separately. Check the output carefully for other software you may need to install or further tasks to perform.<br/><br/>
+
+#### macOS
 1. [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.0.0-stable.zip)
 2. Create a directory and unzip the SDK.
 3. Extract the SDK on desired location for example:<br/>
@@ -61,10 +74,23 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 `unzip ~/Downloads/flutter_macos_v1.0.0-stable.zip`<br/>
 4. Add the flutter tool to your path:<br/>
 ```export PATH=$PATH:`pwd`/flutter/bin```<br/>
+*Note:* The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
 5. Run flutter doctor:<br/>
 `flutter doctor [-v]`<br/>
 This command checks your environment and displays a report to the terminal window. The Dart SDK is bundled with Flutter; it is not necessary to install Dart separately. Check the output carefully for other software you may need to install or further tasks to perform.<br/><br/>
+
+#### Linux
+1. [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz)
+2. Create a directory and unzip the SDK.
+3. Extract the SDK on desired location for example:<br/>
+`cd ~/development`<br/>
+`tar xf ~/Downloads/flutter_linux_v1.0.0-stable.tar.xz`<br/>
+4. Add the flutter tool to your path:<br/>
+```export PATH=$PATH:`pwd`/flutter/bin```<br/>
 *Note:* The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
+5. Run flutter doctor:<br/>
+`flutter doctor [-v]`<br/>
+This command checks your environment and displays a report to the terminal window. The Dart SDK is bundled with Flutter; it is not necessary to install Dart separately. Check the output carefully for other software you may need to install or further tasks to perform.<br/><br/>
 
 ### Set your path
 If you want to run Flutter in any terminal session, you need to update PATH variable permanently. The steps for modifying this variable permanently for all terminal sessions are machine-specific. Typically you add a line to a file that is executed whenever you open a new window. For example:<br/>
