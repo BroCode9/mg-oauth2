@@ -21,9 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.GestureDetector;
@@ -57,13 +55,6 @@ import com.levi9.mgoauth2.mgoauth2example.models.User;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.levi9.mgoauth2.mgoauth2example.document.Constants.ACCESS_TOKEN_KEY;
-import static com.levi9.mgoauth2.mgoauth2example.document.Constants.EMAIL_KEY;
-import static com.levi9.mgoauth2.mgoauth2example.document.Constants.IMAGE_KEY;
-import static com.levi9.mgoauth2.mgoauth2example.document.Constants.JOB_TITLE_KEY;
-import static com.levi9.mgoauth2.mgoauth2example.document.Constants.OFFICE_LOCATION_KEY;
-import static com.levi9.mgoauth2.mgoauth2example.document.Constants.USER_NAME_KEY;
-
 public class DocumentActivity extends AppCompatActivity {
     private static final int RC_PERMISSIONS = 0x123;
     private boolean installRequested;
@@ -88,7 +79,7 @@ public class DocumentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_document);
 
         View documentView = LayoutInflater.from(this)
-                                          .inflate(R.layout.document_layout, null);
+                .inflate(R.layout.document_layout, null);
         ImageView userImage = documentView.findViewById(R.id.userImage);
         TextView userName = documentView.findViewById(R.id.userName);
         TextView email = documentView.findViewById(R.id.email);
@@ -110,7 +101,11 @@ public class DocumentActivity extends AppCompatActivity {
 //                "42FWLh4OPEkQ2YCE2x623PiStGraSpbozwkHu4QNg6FOrOg3HFxqFeQgCPd9Tau9YcimTLoOHIPg9kwFyWMPKJPnPwTDxZ0krEVMWhNtKLes6t1v36xCrRLYgh9U4JSEkiIQadfNzo3oUNijl4uc9ASOBfKXp40QhxH37IgkK8IV78DO9bfgSxsrLbi6dhZK9DJk3PgC");
 
         // Real data
-        userImage.setImageBitmap(getBitmapFromString(user.getPhotoBase64()));
+        if (user.getPhotoBase64() != null
+                && user.getPhotoBase64() != "") {
+            userImage.setImageBitmap(getBitmapFromString(user.getPhotoBase64()));
+        }
+
         userName.setText(user.getDisplayName());
         email.setText(user.getMail());
         jobTitle.setText(user.getJobTitle());
@@ -128,32 +123,32 @@ public class DocumentActivity extends AppCompatActivity {
 
         // Build a renderable from a 2D View.
         CompletableFuture<ViewRenderable> documentControlStage = ViewRenderable.builder()
-                                                                               .setView(this, documentView)
-                                                                               .build();
+                .setView(this, documentView)
+                .build();
 
         CompletableFuture.allOf(documentControlStage)
-                         .handle((notUsed, throwable) -> {
-                             // When you build a Renderable, Sceneform loads its resources in the background while
-                             // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
-                             // before calling get().
+                .handle((notUsed, throwable) -> {
+                    // When you build a Renderable, Sceneform loads its resources in the background while
+                    // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
+                    // before calling get().
 
-                             if (throwable != null) {
-                                 DemoUtils.displayError(this, "Unable to load renderable", throwable);
-                                 return null;
-                             }
+                    if (throwable != null) {
+                        DemoUtils.displayError(this, "Unable to load renderable", throwable);
+                        return null;
+                    }
 
-                             try {
-                                 documentRenderable = documentControlStage.get();
+                    try {
+                        documentRenderable = documentControlStage.get();
 
-                                 // Everything finished loading successfully.
-                                 hasFinishedLoading = true;
+                        // Everything finished loading successfully.
+                        hasFinishedLoading = true;
 
-                             } catch (InterruptedException | ExecutionException ex) {
-                                 DemoUtils.displayError(this, "Unable to load renderable", ex);
-                             }
+                    } catch (InterruptedException | ExecutionException ex) {
+                        DemoUtils.displayError(this, "Unable to load renderable", ex);
+                    }
 
-                             return null;
-                         });
+                    return null;
+                });
 
         // Set up a tap gesture detector.
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
@@ -171,32 +166,32 @@ public class DocumentActivity extends AppCompatActivity {
 
         // Set a touch listener on the Scene to listen for taps.
         arSceneView.getScene()
-                   .setOnTouchListener((HitTestResult hitTestResult, MotionEvent event) -> gestureDetector.onTouchEvent(event));
+                .setOnTouchListener((HitTestResult hitTestResult, MotionEvent event) -> gestureDetector.onTouchEvent(event));
 
         // Set an update listener on the Scene that will hide the loading message once a Plane is
         // detected.
         arSceneView.getScene()
-                   .addOnUpdateListener(frameTime -> {
-                       if (loadingMessageSnackbar == null) {
-                           return;
-                       }
+                .addOnUpdateListener(frameTime -> {
+                    if (loadingMessageSnackbar == null) {
+                        return;
+                    }
 
-                       Frame frame = arSceneView.getArFrame();
-                       if (frame == null) {
-                           return;
-                       }
+                    Frame frame = arSceneView.getArFrame();
+                    if (frame == null) {
+                        return;
+                    }
 
-                       if (frame.getCamera()
-                                .getTrackingState() != TrackingState.TRACKING) {
-                           return;
-                       }
+                    if (frame.getCamera()
+                            .getTrackingState() != TrackingState.TRACKING) {
+                        return;
+                    }
 
-                       for (Plane plane : frame.getUpdatedTrackables(Plane.class)) {
-                           if (plane.getTrackingState() == TrackingState.TRACKING) {
-                               hideLoadingMessage();
-                           }
-                       }
-                   });
+                    for (Plane plane : frame.getUpdatedTrackables(Plane.class)) {
+                        if (plane.getTrackingState() == TrackingState.TRACKING) {
+                            hideLoadingMessage();
+                        }
+                    }
+                });
 
         // Lastly request CAMERA permission which is required by ARCore.
         DemoUtils.requestCameraPermission(this, RC_PERMISSIONS);
@@ -268,7 +263,7 @@ public class DocumentActivity extends AppCompatActivity {
                 DemoUtils.launchPermissionSettings(this);
             } else {
                 Toast.makeText(this, "Camera permission is needed to run this application", Toast.LENGTH_LONG)
-                     .show();
+                        .show();
             }
             finish();
         }
@@ -280,9 +275,9 @@ public class DocumentActivity extends AppCompatActivity {
         if (hasFocus) {
             // Standard Android full-screen functionality.
             getWindow().getDecorView()
-                       .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                                              View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                                              View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                            View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
@@ -303,7 +298,7 @@ public class DocumentActivity extends AppCompatActivity {
 
     private boolean tryPlaceDocumentSystem(MotionEvent tap, Frame frame) {
         if (tap != null && frame.getCamera()
-                                .getTrackingState() == TrackingState.TRACKING) {
+                .getTrackingState() == TrackingState.TRACKING) {
             for (HitResult hit : frame.hitTest(tap)) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
@@ -340,7 +335,7 @@ public class DocumentActivity extends AppCompatActivity {
         loadingMessageSnackbar =
                 Snackbar.make(DocumentActivity.this.findViewById(android.R.id.content), R.string.plane_finding, Snackbar.LENGTH_INDEFINITE);
         loadingMessageSnackbar.getView()
-                              .setBackgroundColor(0xbf323232);
+                .setBackgroundColor(0xbf323232);
         loadingMessageSnackbar.show();
     }
 
