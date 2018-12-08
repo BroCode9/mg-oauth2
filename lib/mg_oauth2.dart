@@ -13,17 +13,28 @@ class MgOauth2 {
 
     final String body = 
       "client_id=eeffec03-c281-4980-b6c0-8c5cbb564dc4"+
-      "&scope=offline_access%20user.read%20mail.read"+
+      "&scope=user.read"+
       "&code=$result" +
       "&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient"+
-      "&grant_type=authorization_code"+
-      r"&client_secret=vxgoR79;rqnSKAVPT128^$|";
+      "&grant_type=authorization_code";
+      // r"&client_secret=vxgoR79;rqnSKAVPT128^$|";
+
+    // final String bodyEncoded = json.encode(body);
+
+    // final String body = json.encode({
+    //   "grant_type": "authorization_code",
+    //   "client_id": "eeffec03-c281-4980-b6c0-8c5cbb564dc4",
+    //   "scope": "offline_access%20user.read%20mail.read",
+    //   "code": result,
+    //   "redirect_uri": "https://login.microsoftonline.com/common/oauth2/nativeclient",
+    //   "client_secret": r"vxgoR79;rqnSKAVPT128^$|"
+    // });
 
     final Map<String, String> headers = {
       "Content-Type": "application/x-www-form-urlencoded",
     };
 
-    var result2 = await http.post(url, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
+    var result2 = await http.post(url, headers: headers, body: body);
     if(result2.statusCode == 200) {
       result2.body;
     }
