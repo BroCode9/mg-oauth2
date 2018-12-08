@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'mg_models.dart';
 
 class MgOauth2 {
+  static const String ACCESS_TOKEN = "access_token";
   static const MethodChannel _channel = const MethodChannel('plugin.screen');
 
   static Future<LoginScreenResponse> openLoginScreen(
@@ -40,7 +42,7 @@ class MgOauth2 {
     if (result2.statusCode == 200) {
       var bodyMap = json.decode(result2.body);
 
-      await prefs.setString('access_token', bodyMap["access_token"]);
+      await prefs.setString(ACCESS_TOKEN, bodyMap[ACCESS_TOKEN]);
       await prefs.setString('refresh_token', bodyMap["refresh_token"]);
     } else {
       await prefs.clear();
@@ -49,7 +51,7 @@ class MgOauth2 {
 
   static Future<MgUser> fetchMe() async {
     var prefs = await SharedPreferences.getInstance();
-    var accessToken = prefs.getString("access_token");
+    var accessToken = prefs.getString(ACCESS_TOKEN);
 
     var url = 'https://graph.microsoft.com/v1.0/me';
 
@@ -68,8 +70,7 @@ class MgOauth2 {
 
   static Future<String> fetchMyPhoto() async {
     var prefs = await SharedPreferences.getInstance();
-    var accessToken = prefs.getString("access_token");
-
+    var accessToken = prefs.getString(ACCESS_TOKEN);
     var url = "https://graph.microsoft.com/v1.0/me/photo/\$value";
 
     final Map<String, String> headers = {
@@ -100,7 +101,7 @@ class MgOauth2 {
 
   static Future<bool> isLoggedIn() async {
     var prefs = await SharedPreferences.getInstance();
-    return prefs.getString("access_token") != null;
+    return prefs.getString(ACCESS_TOKEN) != null;
   }
 
   static Future<void> startArActivity(user) async {
