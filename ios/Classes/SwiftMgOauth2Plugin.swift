@@ -102,7 +102,7 @@ class MyWebViewVC: UIViewController, WKNavigationDelegate {
     
     @objc func tappedClose() {
         dismiss(animated: true) {
-            self.flutterResult!("Bravo")
+            self.flutterResult!("result.canceled")
         }
     }
     
