@@ -8,8 +8,8 @@ Lack of documentation isn't helping either.
 
 - [Our Goal](#our-goal)
 - [Getting Started](#getting-started)
-  - [Installing Flutter SDK(#installing-flutter-sdk)
-  - [Set your path(#set-your-path)
+  - [Installing Flutter SDK](#installing-flutter-sdk)
+  - [Set your path](#set-your-path)
 
 ## Our Goal
 
