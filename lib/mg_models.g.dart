@@ -8,13 +8,13 @@ part of 'mg_models.dart';
 
 MgUser _$MgUserFromJson(Map<String, dynamic> json) {
   return MgUser(
-      displayName: json['displayName'],
-      givenName: json['givenName'],
-      jobTitle: json['jobTitle'],
-      mail: json['mail'],
-      mobilePhone: json['mobilePhone'],
-      officeLocation: json['officeLocation'])
-    ..id = json['id'];
+      displayName: json['displayName'] as String,
+      givenName: json['givenName'] as String,
+      jobTitle: json['jobTitle'] as String,
+      mail: json['mail'] as String,
+      mobilePhone: json['mobilePhone'] as String,
+      officeLocation: json['officeLocation'] as String)
+    ..id = json['id'] as String;
 }
 
 Map<String, dynamic> _$MgUserToJson(MgUser instance) => <String, dynamic>{

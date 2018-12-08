@@ -6,13 +6,13 @@ part 'mg_models.g.dart';
 
 @JsonSerializable()
 class MgUser {
-  var id;
-  var displayName;
-  var givenName;
-  var jobTitle;
-  var mail;
-  var mobilePhone;
-  var officeLocation;
+  String id;
+  String displayName;
+  String givenName;
+  String jobTitle;
+  String mail;
+  String mobilePhone;
+  String officeLocation;
 
   MgUser(
       {this.displayName,

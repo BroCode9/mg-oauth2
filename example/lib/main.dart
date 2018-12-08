@@ -18,7 +18,7 @@ class _MyAppState extends State<MyApp> {
 
   var _isLoggedIn;
 
-  var _name = "";
+  MgUser _user = MgUser();
 
   @override
   void initState() {
@@ -61,16 +61,16 @@ class _MyAppState extends State<MyApp> {
   fetchMyProfile() {
     MgOauth2.fetchMe().then((value) {
       setState(() {
-        _name = value.displayName;
+        _user = value;
       });
     });
   }
 
   logout() {
     MgOauth2.logout().then((value) {
-        setState(() {
-          _isLoggedIn = false;
-        });
+      setState(() {
+        _isLoggedIn = false;
+      });
     });
   }
 
@@ -92,21 +92,35 @@ class _MyAppState extends State<MyApp> {
                     child: new Text("Login"),
                   ),
                   new RaisedButton(
-                    onPressed: openLoginScreen,
+                    onPressed: _isLoggedIn ? logout : null,
                     child: new Text("Logout"),
                   ),
                 ],
               ),
-              new Center(
-                child: new RaisedButton(
-                  onPressed: fetchMyProfile,
-                  child: new Text("Fetch my profile"),
-                ),
-              ),
-              new Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: new Text(_name),
-              )
+              new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new RaisedButton(
+                      onPressed: fetchMyProfile,
+                      child: new Text("Fetch my profile"),
+                    ),
+                  ]),
+              _user.displayName != null
+                  ? new Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Column(
+                          children: <Widget>[
+                            new Text(_user.displayName),
+                            new Text(_user.mail)
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                  : new Container()
             ],
           )),
     );
