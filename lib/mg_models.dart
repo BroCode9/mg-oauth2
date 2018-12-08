@@ -13,7 +13,7 @@ class MgUser {
   var mail;
   var mobilePhone;
   var officeLocation;
-  var photoBase64 = "";
+  var photoBase64;
 
   MgUser(
       {this.displayName,

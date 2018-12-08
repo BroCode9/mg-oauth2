@@ -101,21 +101,23 @@ public class DocumentActivity extends AppCompatActivity {
         User user = new Gson().fromJson(user_data, User.class);
 
         // Mocked data - DELETE!!!
-        userImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img));
-        userName.setText("User Name");
-        email.setText("u.name@levi9.com");
-        jobTitle.setText("Job");
-        officeLocation.setText("Office");
-        accessToken.setText(
-                "42FWLh4OPEkQ2YCE2x623PiStGraSpbozwkHu4QNg6FOrOg3HFxqFeQgCPd9Tau9YcimTLoOHIPg9kwFyWMPKJPnPwTDxZ0krEVMWhNtKLes6t1v36xCrRLYgh9U4JSEkiIQadfNzo3oUNijl4uc9ASOBfKXp40QhxH37IgkK8IV78DO9bfgSxsrLbi6dhZK9DJk3PgC");
+//        userImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img));
+//        userName.setText("User Name");
+//        email.setText("u.name@levi9.com");
+//        jobTitle.setText("Job");
+//        officeLocation.setText("Office");
+//        accessToken.setText(
+//                "42FWLh4OPEkQ2YCE2x623PiStGraSpbozwkHu4QNg6FOrOg3HFxqFeQgCPd9Tau9YcimTLoOHIPg9kwFyWMPKJPnPwTDxZ0krEVMWhNtKLes6t1v36xCrRLYgh9U4JSEkiIQadfNzo3oUNijl4uc9ASOBfKXp40QhxH37IgkK8IV78DO9bfgSxsrLbi6dhZK9DJk3PgC");
 
         // Real data
-//        userImage.setImageBitmap(getBitmapFromString(getIntentStringForKey(IMAGE_KEY)));
-//        userName.setText(getIntentStringForKey(USER_NAME_KEY));
-//        email.setText(getIntentStringForKey(EMAIL_KEY));
-//        jobTitle.setText(getIntentStringForKey(JOB_TITLE_KEY));
-//        officeLocation.setText(getIntentStringForKey(OFFICE_LOCATION_KEY));
-//        accessToken.setText(getIntentStringForKey(ACCESS_TOKEN_KEY));
+        userImage.setImageBitmap(getBitmapFromString(user.getPhotoBase64()));
+        userName.setText(user.getDisplayName());
+        email.setText(user.getMail());
+        jobTitle.setText(user.getJobTitle());
+        officeLocation.setText(user.getOfficeLocation());
+
+        // TODO: get from shared prefs
+        accessToken.setText("42FWLh4OPEkQ2YCE2x623PiStGraSpbozwkHu4QNg6FOrOg3HFxqFeQgCPd9Tau9YcimTLoOHIPg9kwFyWMPKJPnPwTDxZ0krEVMWhNtKLes6t1v36xCrRLYgh9U4JSEkiIQadfNzo3oUNijl4uc9ASOBfKXp40QhxH37IgkK8IV78DO9bfgSxsrLbi6dhZK9DJk3PgC");
 
         if (!DemoUtils.checkIsSupportedDeviceOrFinish(this)) {
             // Not a supported device.

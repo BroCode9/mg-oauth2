@@ -17,8 +17,6 @@ class _MyAppState extends State<MyApp> {
 
   var _isLoggedIn;
 
-  var _name = "";
-
   var _userProfile;
 
   @override
@@ -69,7 +67,6 @@ class _MyAppState extends State<MyApp> {
   fetchMyProfile() {
     MgOauth2.fetchMyProfile().then((value) {
       setState(() {
-        _name = value.displayName;
         _userProfile = value;
       });
     });
