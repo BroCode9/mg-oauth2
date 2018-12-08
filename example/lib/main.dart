@@ -88,12 +88,18 @@ class _MyAppState extends State<MyApp> {
     MgOauth2.logout().then((value) {
       setState(() {
         _isLoggedIn = false;
+        _user = MgUser();
+        _photoBase64 = null;
       });
     });
   }
 
   startArActivity() {
-    MgOauth2.startArActivity(_user, _photoBase64);
+    if (_photoBase64 != null || _user.displayName != null) {
+      MgOauth2.startArActivity(_user, _photoBase64);
+      return;
+    }
+    Fluttertoast.showToast(msg: "Load user data or picture 1st!");
   }
 
   ImageProvider getImageProvider() {
@@ -158,7 +164,11 @@ class _MyAppState extends State<MyApp> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         new RaisedButton(
-                          onPressed: () { startArActivity();},
+                          onPressed: _isLoggedIn
+                              ? () {
+                                  startArActivity();
+                                }
+                              : null,
                           child: new Text("Secret Button"),
                         )
                       ],
