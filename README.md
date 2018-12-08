@@ -17,7 +17,7 @@ Lack of documentation isn't helping either.
     - [macOS](#macos-install)
     - [Linux](#linux-install)
   - [Set your path](#set-your-path)
-  - [License](#license)
+- [License](#license)
 
 ## Our Goal
 
