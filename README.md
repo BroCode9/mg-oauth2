@@ -105,7 +105,7 @@ If you want to run Flutter in any terminal session, you need to update PATH vari
 
 ## License
 
-    Copyright 2012 The Dagger Authors
+    Copyright 2018 The mg-oauth2 Authors
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
