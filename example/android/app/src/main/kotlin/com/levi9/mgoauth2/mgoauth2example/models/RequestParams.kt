@@ -1,4 +1,4 @@
-package com.levi9.mg.oauth2.mgoauth2example.models
+package com.levi9.mgoauth2.mgoauth2example.models
 
 data class RequestParams(var url: String = "",
                          var clientID: String = "",
