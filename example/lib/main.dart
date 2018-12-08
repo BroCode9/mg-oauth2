@@ -19,6 +19,8 @@ class _MyAppState extends State<MyApp> {
 
   var _isLoggedIn;
 
+  var _photoBase64;
+
   MgUser _user = MgUser();
 
   @override
@@ -36,13 +38,13 @@ class _MyAppState extends State<MyApp> {
         "/nativeclient",
         ResponseMode.query(),
         ScopeBuilder()
-        .userRead()
-        .mailRead()
-        .calendarsRead()
-        .contactsRead()
-        .peopleRead()
-        .userReadBasicAll()
-        .build(),
+            .userRead()
+            .mailRead()
+            .calendarsRead()
+            .contactsRead()
+            .peopleRead()
+            .userReadBasicAll()
+            .build(),
         "123");
   }
 
@@ -74,6 +76,14 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  fetchMyPhoto() {
+    MgOauth2.fetchMyPhoto().then((value) {
+      setState(() {
+        _user.photoBase64 = value;
+      });
+    });
+  }
+
   logout() {
     MgOauth2.logout().then((value) {
       setState(() {
@@ -82,20 +92,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  fetchMyPhoto() {
-    MgOauth2.fetchMyPhoto().then((value) {
-      setState(() {
-              _user.photoBase64 = value;
-            });
-    });
-  }
-
   startArActivity() {
-    MgOauth2.startArActivity(_user);
+    MgOauth2.startArActivity(_user, _photoBase64);
   }
 
   ImageProvider getImageProvider() {
     var data = new Uint8List.fromList(_user.photoBase64.codeUnits);
+    _photoBase64 = base64.encode(data);
     return Image.memory(data).image;
   }
 
@@ -113,11 +116,19 @@ class _MyAppState extends State<MyApp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   new RaisedButton(
-                    onPressed: _isLoggedIn ? null : openLoginScreen,
+                    onPressed: _isLoggedIn
+                        ? null
+                        : () {
+                            openLoginScreen();
+                          },
                     child: new Text("Login"),
                   ),
                   new RaisedButton(
-                    onPressed: _isLoggedIn ? logout : null,
+                    onPressed: _isLoggedIn
+                        ? () {
+                            logout();
+                          }
+                        : null,
                     child: new Text("Logout"),
                   ),
                 ],
@@ -126,23 +137,52 @@ class _MyAppState extends State<MyApp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     new RaisedButton(
-                      onPressed: _isLoggedIn ? fetchMyProfile : null,
+                      onPressed: _isLoggedIn
+                          ? () {
+                              fetchMyProfile();
+                            }
+                          : null,
                       child: new Text("My profile"),
                     ),
                     new RaisedButton(
-                      onPressed: _isLoggedIn ? fetchMyPhoto : null,
+                      onPressed: _isLoggedIn
+                          ? () {
+                              fetchMyPhoto();
+                            }
+                          : null,
                       child: new Text("My Photo"),
                     )
                   ]),
-              _user != null ? new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new RaisedButton(
-                    onPressed: startArActivity,
-                    child: new Text("Secret Button"),
-                  )
-                ],
-              ) : new Container(),
+              _user != null
+                  ? new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new RaisedButton(
+                          onPressed: () { startArActivity();},
+                          child: new Text("Secret Button"),
+                        )
+                      ],
+                    )
+                  : new Container(),
+              _user.photoBase64 != null
+                  ? new Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Column(
+                            children: <Widget>[
+                              new Image(
+                                width: 150,
+                                height: 150,
+                                image: getImageProvider(),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  : new Container(),
               _user.displayName != null
                   ? new Padding(
                       padding: EdgeInsets.only(top: 50),
@@ -151,13 +191,6 @@ class _MyAppState extends State<MyApp> {
                         children: <Widget>[
                           new Column(
                             children: <Widget>[
-                              _user.photoBase64 != ""
-                                  ? new Image(
-                                      width: 150,
-                                      height: 150,
-                                      image: getImageProvider(),
-                                    )
-                                  : new Container(),
                               new Text(_user.displayName),
                               new Text(_user.mail),
                               new Text(_user.jobTitle),

@@ -88,9 +88,8 @@ class MgOauth2 {
 
   static Future<MgUser> fetchMyProfile() async {
     var user = await fetchMe();
-    var photoBase64 = await fetchMyPhoto();
-
-    user.photoBase64 = photoBase64;
+    // var photoBase64 = await fetchMyPhoto();
+    // user.photoBase64 = photoBase64;
     return user;
   }
 
@@ -104,8 +103,9 @@ class MgOauth2 {
     return prefs.getString(ACCESS_TOKEN) != null;
   }
 
-  static Future<void> startArActivity(user) async {
-    await _channel.invokeMethod("openArScreen", user.toJson());
+  static Future<void> startArActivity(user, photoBase64) async {
+    user.photoBase64 = photoBase64;
+    await _channel.invokeMethod("openArScreen", json.encode(user));
   }
 }
 
