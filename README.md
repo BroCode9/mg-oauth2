@@ -29,7 +29,14 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 `unzip ~/Downloads/flutter_macos_v1.0.0-stable.zip`<br/>
 4. Add the flutter tool to your path:<br/>
 `export PATH=$PATH:``pwd``/flutter/bin`<br/>
-_Note: The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
+*Note:* The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
 
 ## Set your path
-- TBA
+If you want to run Flutter in any terminal session, you need to update PATH variable permanently. The steps for modifying this variable permanently for all terminal sessions are machine-specific. Typically you add a line to a file that is executed whenever you open a new window. For example:<br/>
+1. Determine the directory where you placed the Flutter SDK. You will need this in Step 3.
+2. Open (or create) `$HOME/.bash_profile`. The file path and filename might be different on your machine.
+3. Add the following line and change `[PATH_TO_FLUTTER_GIT_DIRECTORY]` to be the path where you cloned Flutter’s git repo:<br/>
+`export PATH=$PATH:[PATH_TO_FLUTTER_GIT_DIRECTORY]/flutter/bin`
+4. Run `source $HOME/.bash_profile` to refresh the current window.
+5. Verify that the flutter/bin directory is now in your PATH by running:
+`echo $PATH`
