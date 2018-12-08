@@ -24,7 +24,7 @@ MG-Oauth2 is intended to ease using Graph API and make you focus on your own wor
 
 ## System requirements
 
-### <a name="windows-install">Windows</a>
+### Windows
 
 * **Operating Systems:** Windows 7 SP1 or later (64-bit)
 * **Disk Space:** 400 MB (Without IDE/tools)
@@ -32,14 +32,14 @@ MG-Oauth2 is intended to ease using Graph API and make you focus on your own wor
   - [Windows PowerShell 5.0](https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell?view=powershell-6) or newer (this is pre-installed with Windows 10)
   - [Git for Windows](https://git-scm.com/download/win), with the Use Git from the Windows Command Prompt option.
 
-### <a name="macos-install">macOS</a>
+### macOS
 
 * **Operating Systems:** macOS (64-bit)
 * **Disk Space:** 700 MB (Without IDE/tools)
 * **Tools:** Flutter depends on these tools:
   - ```bash, mkdir, rm, git, curl, unzip, which```
   
-### <a name="linux-install">Linux</a>
+### Linux
 
 * **Operating Systems:** Linux (64-bit)
 * **Disk Space:** 600 MB (Without IDE/tools)
@@ -57,7 +57,7 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 
 ### Installing Flutter SDK
 
-#### Windows
+#### <a name="windows-install"></a>Windows
 1. [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_v1.0.0-stable.zip)
 2. Extract the zip file and place the contained `flutter` in the desired installation location for the Flutter SDK (eg. `C:\src\flutter`; do not install Flutter in a directory like `C:\Program Files\` that requires elevated privileges)<br/>
 3. Locate the file `flutter_console.bat` inside the `flutter` directory. Start it by double-clicking.<br/>
@@ -66,7 +66,7 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 `flutter doctor [-v]`<br/>
 This command checks your environment and displays a report to the terminal window. The Dart SDK is bundled with Flutter; it is not necessary to install Dart separately. Check the output carefully for other software you may need to install or further tasks to perform.<br/><br/>
 
-#### macOS
+#### <a name="macos-install"></a>macOS
 1. [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.0.0-stable.zip)
 2. Create a directory and unzip the SDK.
 3. Extract the SDK on desired location for example:<br/>
@@ -79,7 +79,7 @@ This command checks your environment and displays a report to the terminal windo
 `flutter doctor [-v]`<br/>
 This command checks your environment and displays a report to the terminal window. The Dart SDK is bundled with Flutter; it is not necessary to install Dart separately. Check the output carefully for other software you may need to install or further tasks to perform.<br/><br/>
 
-#### Linux
+#### <a name="linux-install"></a>Linux
 1. [Download the Flutter SDK](https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz)
 2. Create a directory and unzip the SDK.
 3. Extract the SDK on desired location for example:<br/>
