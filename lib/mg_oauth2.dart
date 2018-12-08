@@ -38,13 +38,15 @@ class MgOauth2 {
       "Content-Type": "application/x-www-form-urlencoded",
     };
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var result2 = await http.post(url, headers: headers, body: body);
     if (result2.statusCode == 200) {
       var bodyMap = json.decode(result2.body);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
 
       await prefs.setString(ACCESS_TOKEN, bodyMap[ACCESS_TOKEN]);
       await prefs.setString('refresh_token', bodyMap["refresh_token"]);
+    } else {
+      await prefs.clear();
     }
   }
 
@@ -79,20 +81,18 @@ class MgOauth2 {
 
     final response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      return onPicture(response.body);
-      // return response.body;
+      return response.body.toString();
     }
 
     return "-";
   }
 
-  static String onPicture(response) {
-    var buffer = response as ByteBuffer;
-    var list = new Uint8List.view(buffer);
+  static Future<MgUser> fetchMyProfile() async {
+    var user = await fetchMe();
+    var photoBase64 = await fetchMyPhoto();
 
-    String header = "data:image/png;base64";
-    String base64 = base64Encode(list);
-    return header + base64;
+    user.photoBase64 = photoBase64;
+    return user;
   }
 
   static Future<void> logout() async {
@@ -103,6 +103,10 @@ class MgOauth2 {
   static Future<bool> isLoggedIn() async {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getString(ACCESS_TOKEN) != null;
+  }
+
+  static Future<void> startArActivity(user) async {
+    await _channel.invokeMethod("openArScreen", user.toJson());
   }
 }
 

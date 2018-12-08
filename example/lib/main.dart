@@ -20,6 +20,8 @@ class _MyAppState extends State<MyApp> {
   MgUser _user = MgUser();
   var _image;
 
+  var _userProfile;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,14 @@ class _MyAppState extends State<MyApp> {
         ResponseType.code(),
         "/nativeclient",
         ResponseMode.query(),
-        ScopeBuilder().offlineAccess().userRead().mailRead().build(),
+        ScopeBuilder()
+        .userRead()
+        .mailRead()
+        .calendarsRead()
+        .contactsRead()
+        .peopleRead()
+        .userReadBasicAll()
+        .build(),
         "123");
   }
 
@@ -60,9 +69,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   fetchMyProfile() {
-    MgOauth2.fetchMe().then((value) {
+    MgOauth2.fetchMyProfile().then((value) {
       setState(() {
         _user = value;
+        _userProfile = value;
       });
     });
   }
@@ -81,6 +91,10 @@ class _MyAppState extends State<MyApp> {
               _image = value;
             });
     });
+  }
+
+  startArActivity() {
+    MgOauth2.startArActivity(_userProfile);
   }
 
   @override
