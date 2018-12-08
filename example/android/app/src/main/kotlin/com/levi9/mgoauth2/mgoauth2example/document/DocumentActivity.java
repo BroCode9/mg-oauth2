@@ -77,14 +77,6 @@ public class DocumentActivity extends AppCompatActivity {
     // True once the scene has been placed.
     private boolean hasPlacedDocumentSystem = false;
 
-    private ConstraintLayout documentView;
-    private ImageView userImage;
-    private TextView userName;
-    private TextView email;
-    private TextView jobTitle;
-    private TextView officeLocation;
-    private TextView accessToken;
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -95,12 +87,12 @@ public class DocumentActivity extends AppCompatActivity {
 
         View documentView = LayoutInflater.from(this)
                                           .inflate(R.layout.document_layout, null);
-        userImage = documentView.findViewById(R.id.userImage);
-        userName = documentView.findViewById(R.id.userName);
-        email = documentView.findViewById(R.id.email);
-        jobTitle = documentView.findViewById(R.id.jobTitle);
-        officeLocation = documentView.findViewById(R.id.officeLocation);
-        accessToken = documentView.findViewById(R.id.accessToken);
+        ImageView userImage = documentView.findViewById(R.id.userImage);
+        TextView userName = documentView.findViewById(R.id.userName);
+        TextView email = documentView.findViewById(R.id.email);
+        TextView jobTitle = documentView.findViewById(R.id.jobTitle);
+        TextView officeLocation = documentView.findViewById(R.id.officeLocation);
+        TextView accessToken = documentView.findViewById(R.id.accessToken);
 
         // Mocked data - DELETE!!!
         userImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img));
