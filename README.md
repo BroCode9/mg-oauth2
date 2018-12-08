@@ -17,6 +17,7 @@ Lack of documentation isn't helping either.
     - [macOS](#macos-install)
     - [Linux](#linux-install)
   - [Set your path](#set-your-path)
+- [License](#license)
 
 ## Our Goal
 
@@ -101,3 +102,19 @@ If you want to run Flutter in any terminal session, you need to update PATH vari
 4. Run `source $HOME/.bash_profile` to refresh the current window.
 5. Verify that the flutter/bin directory is now in your PATH by running:
 `echo $PATH`
+
+## License
+
+    Copyright 2018 The mg-oauth2 Authors
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
