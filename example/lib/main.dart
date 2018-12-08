@@ -18,6 +18,7 @@ class _MyAppState extends State<MyApp> {
   var _isLoggedIn;
 
   MgUser _user = MgUser();
+  var _image;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _MyAppState extends State<MyApp> {
         _isLoggedIn = value;
       });
     });
+    _image = "";
     _mgOauth = new MgOuath2AuthorizeModel(
         "eeffec03-c281-4980-b6c0-8c5cbb564dc4",
         ResponseType.code(),
@@ -73,6 +75,14 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  fetchMyPhoto() {
+    MgOauth2.fetchMyPhoto().then((value) {
+      setState(() {
+              _image = value;
+            });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -101,24 +111,33 @@ class _MyAppState extends State<MyApp> {
                   children: <Widget>[
                     new RaisedButton(
                       onPressed: fetchMyProfile,
-                      child: new Text("Fetch my profile"),
+                      child: new Text("My profile"),
                     ),
+                    new RaisedButton(
+                      onPressed: fetchMyPhoto,
+                      child: new Text("My Photo"),
+                    )
                   ]),
               _user.displayName != null
                   ? new Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Column(
-                          children: <Widget>[
-                            new Text(_user.displayName),
-                            new Text(_user.mail)
-                          ],
-                        )
-                      ],
-                    ),
-                  )
+                      padding: EdgeInsets.only(top: 50),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Column(
+                            children: <Widget>[
+                              _image != ""
+                                  ? new Image(
+                                      image: _image,
+                                    )
+                                  : new Container(),
+                              new Text(_user.displayName),
+                              new Text(_user.mail)
+                            ],
+                          )
+                        ],
+                      ),
+                    )
                   : new Container()
             ],
           )),
