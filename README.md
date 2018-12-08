@@ -7,6 +7,10 @@ Lack of documentation isn't helping either.
 ## Table of Contents
 
 - [Our Goal](#our-goal)
+- [System requirements](#system-requirements)
+  - [Windows](#windows)
+  - [macOS](#macos)
+  - [Linux](#linux)
 - [Getting Started](#getting-started)
   - [Installing Flutter SDK](#installing-flutter-sdk)
   - [Set your path](#set-your-path)
@@ -15,6 +19,32 @@ Lack of documentation isn't helping either.
 
 MG-Oauth2 is intended to ease using Graph API and make you focus on your own work. What's even better we mapped most of important objects so you can start retrieving users, their emails and calendar data. 
 
+## System requirements
+
+### Windows
+
+* **Operating Systems:** Windows 7 SP1 or later (64-bit)
+* **Disk Space:** 400 MB (Without IDE/tools)
+* **Tools:** Flutter depends on these tools:
+  - [Windows PowerShell 5.0](https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell?view=powershell-6) or newer (this is pre-installed with Windows 10)
+  - [Git for Windows](https://git-scm.com/download/win), with the Use Git from the Windows Command Prompt option.
+
+### MacOS
+
+* **Operating Systems:** macOS (64-bit)
+* **Disk Space:** 700 MB (Without IDE/tools)
+* **Tools:** Flutter depends on these tools:
+  - ```bash, mkdir, rm, git, curl, unzip, which```
+  
+### Linux
+
+* **Operating Systems:** Linux (64-bit)
+* **Disk Space:** 600 MB (Without IDE/tools)
+* **Tools:** Flutter depends on these tools:
+  - ```bash, mkdir, rm, git, curl, unzip, which```
+* **Shared libraries:** Flutter `test` command depends on this library being available in your environment.
+  - ```libGLU.so.1``` - provided by mesa packages e.g. ```libglu1-mesa``` on Ubuntu/Debian
+  
 ## Getting Started
 
 For help getting started with Flutter, view our online
@@ -30,7 +60,10 @@ For help on editing plugin code, view the [documentation](https://flutter.io/dev
 `cd ~/development`<br/>
 `unzip ~/Downloads/flutter_macos_v1.0.0-stable.zip`<br/>
 4. Add the flutter tool to your path:<br/>
-`export PATH=$PATH:``pwd``/flutter/bin`<br/>
+```export PATH=$PATH:`pwd`/flutter/bin```<br/>
+5. Run flutter doctor:<br/>
+`flutter doctor [-v]`<br/>
+This command checks your environment and displays a report to the terminal window. The Dart SDK is bundled with Flutter; it is not necessary to install Dart separately. Check the output carefully for other software you may need to install or further tasks to perform.<br/><br/>
 *Note:* The above command sets your PATH temporarily, for the current terminal session. To permanently add Flutter to your path, see [Set your path](#set-your-path)
 
 ### Set your path
